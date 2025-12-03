@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huellitas - Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#10b981",
+                        secondary: "#059669",
+                        accent: "#34d399",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans antialiased">
+
+    <div class="min-h-screen flex">
+
+        <div
+            class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-secondary to-emerald-700 relative overflow-hidden">
+            <div class="absolute inset-0 bg-black/10"></div>
+
+            <div class="absolute top-20 left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+
+            <div class="relative z-10 flex flex-col justify-center px-16 text-white">
+                <div class="mb-12">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div
+                            class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-3xl">pets</span>
+
+                        </div>
+                        <div>
+                            <h1 class="text-4xl font-bold">Huellitas</h1>
+                            <p class="text-white/80">Clínica Veterinaria</p>
+                        </div>
+                    </div>
+
+                    <h2 class="text-3xl font-bold mb-4">Bienvenido de vuelta</h2>
+                    <p class="text-white/90 text-lg">Gestiona tu clínica veterinaria de manera eficiente y profesional
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined">check</span>
+                        </div>
+                        <span class="text-lg">Gestión completa de citas</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined">check</span>
+                        </div>
+                        <span class="text-lg">Historial médico digital</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+            <div class="w-full max-w-md">
+
+                <div class="lg:hidden flex items-center justify-center gap-3 mb-8">
+                    <svg class="w-12 h-12 text-primary" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.5 8c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5S11.17 6.5 12 6.5s1.5.67 1.5 1.5z" />
+                    </svg>
+                    <h1 class="text-3xl font-bold text-gray-800">Huellitas</h1>
+                </div>
+
+                <div class="flex gap-2 mb-8 bg-gray-100 p-1 rounded-xl">
+                    <button id="loginTab"
+                        class="flex-1 py-3 px-4 font-semibold rounded-lg transition-all bg-white text-primary shadow-sm">
+                        Iniciar Sesión
+                    </button>
+                    <button id="registerTab"
+                        class="flex-1 py-3 px-4 font-semibold rounded-lg transition-all text-gray-600 hover:text-gray-800">
+                        Registrarse
+                    </button>
+                </div>
+
+                <div th:if="${param.error}"
+                    class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg border border-red-200" role="alert">
+                    <span class="font-medium">Error:</span> Usuario o contraseña incorrectos.
+                </div>
+                <div th:if="${param.logout}"
+                    class="mb-4 p-4 text-sm text-blue-700 bg-blue-100 rounded-lg border border-blue-200" role="alert">
+                    <span class="font-medium">¡Hasta pronto!</span> Has cerrado sesión correctamente.
+                </div>
+
+                <div id="loginForm">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">¡Bienvenido!</h2>
+                    <p class="text-gray-600 mb-8">Ingresa tus credenciales para continuar</p>
+
+                    <form class="space-y-5" th:action="@{/login}" method="post">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Correo
+                                Electrónico</label>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 peer-focus:text-primary">mail</span>
+                                <input id="username" type="text" name="username" placeholder="admin@huellitas.com"
+                                    required
+                                    class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all peer">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="password"
+                                class="block text-sm font-medium text-gray-700 mb-2">Contraseña</label>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">lock</span>
+                                <input id="password" type="password" name="password" placeholder="••••••••" required
+                                    class="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                                <button type="button"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 toggle-password">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" name="remember-me"
+                                    class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                <span class="text-sm text-gray-600">Recordarme</span>
+                            </label>
+                            <a href="#" class="text-sm font-medium text-primary hover:text-secondary">¿Olvidaste tu
+                                contraseña?</a>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-3 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+                            Iniciar Sesión
+                        </button>
+                    </form>
+                </div>
+
+                <div id="registerForm" class="hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Crear una cuenta</h2>
+                    <p class="text-gray-600 mb-8">Completa el formulario para registrarte</p>
+
+                    <form class="space-y-5" th:action="@{/registro}" method="post">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                            <div>
+                                <label for="reg-nombres"
+                                    class="block text-sm font-medium text-gray-700 mb-2">Nombres</label>
+                                <div class="relative">
+                                    <span
+                                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">person</span>
+                                    <input id="reg-nombres" type="text" name="nombres" placeholder="Maria" required
+                                        class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="reg-apellidos"
+                                    class="block text-sm font-medium text-gray-700 mb-2">Apellidos</label>
+                                <div class="relative">
+                                    <span
+                                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">person</span>
+                                    <input id="reg-apellidos" type="text" name="apellidos" placeholder="Vasquez"
+                                        required
+                                        class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="reg-dni" class="block text-sm font-medium text-gray-700 mb-2">DNI</label>
+                                <div class="relative">
+                                    <span
+                                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">badge</span>
+                                    <input id="reg-dni" type="text" name="dni" placeholder="12345678" required
+                                        maxlength="8"
+                                        class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="reg-tel"
+                                    class="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
+                                <div class="relative">
+                                    <span
+                                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">phone</span>
+                                    <input id="reg-tel" type="text" name="telefono" placeholder="999 999 999"
+                                        class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="reg-direccion"
+                                class="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">home</span>
+                                <input id="reg-direccion" type="text" name="direccion"
+                                    placeholder="Av. Principal 123, Chiclayo" required
+                                    class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="reg-email" class="block text-sm font-medium text-gray-700 mb-2">Correo
+                                Electrónico</label>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">mail</span>
+                                <input id="reg-email" type="email" name="email" placeholder="email@email.com" required
+                                    class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="reg-pass"
+                                class="block text-sm font-medium text-gray-700 mb-2">Contraseña</label>
+                            <div class="relative">
+                                <span
+                                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">lock</span>
+                                <input id="reg-pass" type="password" name="password" placeholder="••••••••" required
+                                    class="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all">
+
+                                <button type="button"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 toggle-password">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                </button>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">Mínimo 8 caracteres</p>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-3 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+                            Crear Cuenta
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // CAMBIAR DE TABS
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('bg-white', 'text-primary', 'shadow-sm');
+            loginTab.classList.remove('text-gray-600');
+            registerTab.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+            registerTab.classList.add('text-gray-600');
+
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+        });
+
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('bg-white', 'text-primary', 'shadow-sm');
+            registerTab.classList.remove('text-gray-600');
+            loginTab.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+            loginTab.classList.add('text-gray-600');
+
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        });
+
+        // vISIBILIDAD DE LA CONTRASEÑA (Funciona para ambos formularios)
+        document.querySelectorAll('.toggle-password').forEach(button => {
+            button.addEventListener('click', function () {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('.material-symbols-outlined');
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.textContent = 'visibility_off';
+                } else {
+                    input.type = 'password';
+                    icon.textContent = 'visibility';
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

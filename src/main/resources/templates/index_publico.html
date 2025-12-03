@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Huellitas - Clínica Veterinaria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#10b981",
+                        secondary: "#059669",
+                        accent: "#34d399",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+
+    <!-- Header -->
+    <header
+        class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex h-20 items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary shadow-lg">
+                        <span class="material-symbols-outlined text-white text-3xl">pets</span>
+                    </div>
+
+                    <div>
+                        <h1
+                            class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                            Huellitas</h1>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Clínica Veterinaria</p>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="#servicios"
+                        class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Servicios</a>
+                    <a href="#productos"
+                        class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Productos</a>
+                    <a href="#testimonios"
+                        class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Testimonios</a>
+                    <a href="#contacto"
+                        class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Contacto</a>
+                </nav>
+
+                <div sec:authorize="!isAuthenticated()" class="flex gap-4 items-center">
+                    <a href="/login" class="px-4 py-2 text-primary font-medium">Iniciar Sesión</a>
+                    <button
+                        class="px-6 py-2.5 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                        Reservar Cita
+                    </button>
+                </div>
+
+                <div sec:authorize="isAuthenticated()" class="flex items-center gap-4">
+
+                    <button
+                        onclick="document.getElementById('ventasModal').classList.remove('hidden'); document.getElementById('ventasModal').classList.add('flex');"
+                        class="text-primary font-medium hover:underline flex items-center gap-1">
+                        <span class="material-symbols-outlined">shopping_bag</span> Mis Compras
+                    </button>
+                    <button
+                        onclick="document.getElementById('historialModal').classList.remove('hidden'); document.getElementById('historialModal').classList.add('flex');"
+                        class="text-primary font-medium hover:underline flex items-center gap-1">
+                        <span class="material-symbols-outlined">history</span> Mis Citas
+                    </button>
+
+                    <p>Hola, <span style="font-weight: bold;" th:text="${nombreUsuario}">...</span></p>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="text-red-500 hover:text-red-700 font-medium">
+                            Cerrar Sesión
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section
+            class="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+            <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <!-- Content -->
+                    <div class="space-y-8 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
+                            <span class="h-2 w-2 bg-primary rounded-full animate-pulse"></span>
+                            <span class="text-sm font-medium text-primary">Disponible 24/7 para emergencias</span>
+                        </div>
+
+                        <h1 class="text-5xl lg:text-6xl font-bold leading-tight">
+                            Cuidado
+                            <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                                Compasivo</span>
+                            <br />Para Tu Mejor Amigo
+                        </h1>
+
+                        <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
+                            Brindamos atención médica de calidad excepcional para tus mascotas con un equipo de
+                            veterinarios experimentados y tecnología de vanguardia.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+
+                            <a href="#servicios"
+                                class="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 flex justify-center items-center cursor-pointer">
+                                Agendar Visita
+                            </a>
+
+                            <a href="#servicios"
+                                class="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 font-semibold rounded-xl hover:border-primary transition-all duration-300 flex justify-center items-center text-center cursor-pointer">
+                                Conocer Más
+                            </a>
+
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="grid grid-cols-3 gap-8 pt-8">
+                            <div class="text-center lg:text-left">
+                                <div class="text-3xl font-bold text-primary">15+</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Años de Experiencia</div>
+                            </div>
+                            <div class="text-center lg:text-left">
+                                <div class="text-3xl font-bold text-primary">5000+</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Mascotas Atendidas</div>
+                            </div>
+                            <div class="text-center lg:text-left">
+                                <div class="text-3xl font-bold text-primary">98%</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">Clientes Satisfechos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="relative">
+                        <div class="absolute -top-4 -right-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl"></div>
+                        <div class="absolute -bottom-4 -left-4 w-72 h-72 bg-secondary/20 rounded-full blur-3xl"></div>
+                        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800" alt="Mascota feliz"
+                            class="relative rounded-3xl shadow-2xl w-full h-auto object-cover" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE SERVICIOS (AGREGADA PARA QUE FUNCIONE EL MONGO DB) -->
+        <section id="servicios" class="scroll-mt-24 py-24 bg-white dark:bg-gray-900">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Nuestros Servicios</h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-400">Ofrecemos una amplia gama de servicios
+                        veterinarios para mantener a tu mascota saludable y feliz</p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                    <div th:each="serv : ${servicios}"
+                        class="group relative bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-primary flex flex-col">
+
+                        <div
+                            class="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+
+                        <div class="relative flex-grow">
+                            <div
+                                th:class="'flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg mb-6 group-hover:scale-110 transition-transform ' + ${serv.colorInicio} + ' ' + ${serv.colorFin}">
+                                <span class="material-symbols-outlined text-white text-3xl"
+                                    th:text="${serv.icono}">icon</span>
+                            </div>
+
+                            <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white" th:text="${serv.nombre}">
+                                Nombre Servicio</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4" th:text="${serv.descripcion}">
+                                Descripción...</p>
+                        </div>
+
+                        <div class="relative mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+
+                            <div sec:authorize="isAuthenticated()">
+                                <button th:data-id="${serv.id}" th:data-nombre="${serv.nombre}"
+                                    onclick="abrirReserva(this.getAttribute('data-id'), this.getAttribute('data-nombre'))"
+                                    class="w-full py-2 bg-primary text-white rounded-lg hover:bg-emerald-600 transition-colors text-sm font-medium flex items-center justify-center gap-2 shadow-sm">
+                                    <span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+                                    Reservar Cita
+                                </button>
+                            </div>
+
+                            <div sec:authorize="!isAuthenticated()">
+                                <a href="/login" onclick="return confirm('Inicia sesión para agendar este servicio.')"
+                                    class="w-full py-2 bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium flex items-center justify-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">lock</span>
+                                    Reservar
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCION DE PRODUCTOS -->
+        <section id="productos" class="py-24 bg-white dark:bg-gray-900">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Nuestros Productos</h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-400">
+                        Ofrecemos una amplia gama de productos veterinarios para mantener a tu mascota saludable y feliz
+                    </p>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                    <div th:each="prod : ${productos}"
+                        class="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-primary overflow-hidden flex flex-col h-full">
+
+                        <div class="relative h-48 overflow-hidden bg-gray-100">
+                            <img th:src="${prod.imagenUrl}" th:alt="${prod.nombre}"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+
+                            <div
+                                class="absolute top-3 right-3 bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold shadow-md">
+                                Nuevo
+                            </div>
+                        </div>
+
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white" th:text="${prod.nombre}">
+                                Producto</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 flex-grow"
+                                th:text="${prod.descripcion}">
+                                Descripción del producto...
+                            </p>
+
+                            <div
+                                class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+                                <span class="text-primary font-bold text-lg" th:text="'S/ ' + ${prod.precio}">S/
+                                    0.00</span>
+
+                                <div sec:authorize="isAuthenticated()">
+                                    <button th:data-id="${prod.id}" th:data-nombre="${prod.nombre}"
+                                        th:data-precio="${prod.precio}"
+                                        onclick="agregarAlCarrito(this.getAttribute('data-id'), this.getAttribute('data-nombre'), this.getAttribute('data-precio'))"
+                                        class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-emerald-600 transition-colors text-sm font-medium flex items-center gap-2 shadow-sm hover:shadow-md">
+                                        <span class="material-symbols-outlined">shopping_cart</span> Agregar
+                                    </button>
+
+                                    <div sec:authorize="!isAuthenticated()">
+                                        <a href="/login"
+                                            onclick="return confirm('Debes iniciar sesión para comprar. ¿Ir al login?')"
+                                            class="px-4 py-2 bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm font-medium flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-[18px]">lock</span>
+                                            Agregar
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- SECCION DE TESTINOMIOS -->
+        <section id="testimonios" class="py-24 bg-gray-50 dark:bg-gray-800 relative overflow-hidden">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Lo que dicen nuestros clientes
+                    </h2>
+
+                    <div sec:authorize="isAuthenticated()" class="mt-6">
+                        <button onclick="openModal('testimonioModal')"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-white transition-all shadow-sm">
+                            <span class="material-symbols-outlined">rate_review</span>
+                            Deja tu opinión
+                        </button>
+                    </div>
+                    <div sec:authorize="!isAuthenticated()" class="mt-4 text-sm text-gray-500">
+                        <a href="/login" class="text-primary hover:underline">Inicia sesión</a> para compartir tu
+                        experiencia.
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <button onclick="scrollTestimonios(-1)"
+                        class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-3 rounded-full shadow-lg hover:bg-white text-primary hidden md:block -ml-5">
+                        <span class="material-symbols-outlined">arrow_back_ios</span>
+                    </button>
+
+                    <div id="carruselTestimonios"
+                        class="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide scroll-smooth">
+
+                        <div th:each="test : ${testimonios}"
+                            class="snap-center flex-shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+                            <div
+                                class="bg-white dark:bg-gray-700 rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 h-full border border-gray-100 dark:border-gray-600 flex flex-col">
+
+                                <div class="flex gap-1 mb-4 text-yellow-400">
+                                    <span th:each="i : ${#numbers.sequence(1, test.estrellas)}"
+                                        class="material-symbols-outlined"
+                                        style="font-variation-settings: 'FILL' 1">star</span>
+                                    <span th:if="${test.estrellas < 5}"
+                                        th:each="i : ${#numbers.sequence(test.estrellas + 1, 5)}"
+                                        class="material-symbols-outlined">star</span>
+                                </div>
+
+                                <p class="text-gray-700 dark:text-gray-300 mb-6 italic flex-grow">
+                                    "<span th:text="${test.contenido}">Comentario...</span>"
+                                </p>
+
+                                <div
+                                    class="flex items-center gap-3 mt-auto pt-4 border-t border-gray-100 dark:border-gray-600">
+                                    <div class="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-lg shadow-sm"
+                                        th:text="${#strings.substring(test.autor, 0, 1)}">
+                                        A
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-gray-900 dark:text-white" th:text="${test.autor}">
+                                            Cliente</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400"
+                                            th:text="${#temporals.format(test.fecha, 'dd MMM yyyy')}">Fecha</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div th:if="${#lists.isEmpty(testimonios)}" class="w-full text-center text-gray-500 py-10">
+                            Se el primero en dejar un comentario.
+                        </div>
+
+                    </div>
+
+                    <button onclick="scrollTestimonios(1)"
+                        class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-3 rounded-full shadow-lg hover:bg-white text-primary hidden md:block -mr-5">
+                        <span class="material-symbols-outlined">arrow_forward_ios</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section id="contacto" class="py-24 bg-white dark:bg-gray-900">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div
+                    class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary to-secondary p-12 lg:p-16">
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <div class="relative text-center text-white">
+                        <h2 class="text-4xl lg:text-5xl font-bold mb-6">¿Listo para darle a tu mascota el mejor cuidado?
+                        </h2>
+                        <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+                            Estamos aquí para responder tus preguntas y proporcionar el cuidado experto que tu compañero
+                            peludo merece.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <a href="#servicios"
+                                class="px-8 py-4 bg-white text-primary font-bold rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex justify-center items-center text-center">
+                                Reservar una Cita
+                            </a>
+                            <button onclick="openModal('contactoModal')"
+                                class="px-8 py-4 bg-white/20 backdrop-blur-sm text-white font-bold rounded-xl border-2 border-white hover:bg-white/30 transition-all duration-300">
+                                Contáctanos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
+                            <span class="material-symbols-outlined text-white text-3xl">pets</span>
+                        </div>
+                        <span class="text-xl font-bold text-white">Huellitas</span>
+                    </div>
+                    <p class="text-sm text-gray-400">Tu clínica veterinaria de confianza, dedicada a la salud y
+                        felicidad de tus mascotas.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Navegación</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-primary transition-colors">Inicio</a></li>
+                        <li><a href="#servicios" class="hover:text-primary transition-colors">Servicios</a></li>
+                        <li><a href="#testimonios" class="hover:text-primary transition-colors">Testimonios</a></li>
+                        <li><a href="#contacto" class="hover:text-primary transition-colors">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Contacto</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2">
+                            <span class="material-symbols-outlined text-primary">location_on</span>
+                            <span>Las Delicias, Reque</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">call</span>
+                            <span>(074) 765-4321</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">mail</span>
+                            <span>chriso@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Horario</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex justify-between">
+                            <span>Lunes - Viernes:</span>
+                            <span class="text-primary font-medium">8:00 - 20:00</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Sábado:</span>
+                            <span class="text-primary font-medium">8:00 - 20:00</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Domingo:</span>
+                            <span class="text-gray-500">8:00 - 20:00</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-sm text-gray-500">
+                <p>© 2024 Huellitas Veterinary Clinic. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- TESTIMONIOS MODAL -->
+    <div id="testimonioModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+            <button onclick="closeModal('testimonioModal')"
+                class="absolute top-4 right-4 text-gray-500 hover:text-red-500">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+
+            <h3 class="text-xl font-bold text-gray-800 mb-2 text-center">Tu Opinión nos Importa</h3>
+            <p class="text-center text-gray-500 text-sm mb-6">Cuéntanos cómo fue tu experiencia en Huellitas.</p>
+
+            <form th:action="@{/testimonios/guardar}" method="post" class="space-y-4">
+
+                <div class="flex justify-center gap-2 mb-4 group/stars">
+                    <input type="hidden" name="estrellas" id="ratingValue" value="5">
+                    <button type="button" onclick="setRating(1)"
+                        class="star-btn text-yellow-400 hover:scale-110 transition-transform"><span
+                            class="material-symbols-outlined text-4xl"
+                            style="font-variation-settings: 'FILL' 1">star</span></button>
+                    <button type="button" onclick="setRating(2)"
+                        class="star-btn text-yellow-400 hover:scale-110 transition-transform"><span
+                            class="material-symbols-outlined text-4xl"
+                            style="font-variation-settings: 'FILL' 1">star</span></button>
+                    <button type="button" onclick="setRating(3)"
+                        class="star-btn text-yellow-400 hover:scale-110 transition-transform"><span
+                            class="material-symbols-outlined text-4xl"
+                            style="font-variation-settings: 'FILL' 1">star</span></button>
+                    <button type="button" onclick="setRating(4)"
+                        class="star-btn text-yellow-400 hover:scale-110 transition-transform"><span
+                            class="material-symbols-outlined text-4xl"
+                            style="font-variation-settings: 'FILL' 1">star</span></button>
+                    <button type="button" onclick="setRating(5)"
+                        class="star-btn text-yellow-400 hover:scale-110 transition-transform"><span
+                            class="material-symbols-outlined text-4xl"
+                            style="font-variation-settings: 'FILL' 1">star</span></button>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tu Comentario</label>
+                    <textarea name="contenido" rows="4" required placeholder="Fue una experiencia increíble..."
+                        class="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-primary outline-none resize-none"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full py-3 bg-primary text-white rounded-xl font-bold hover:bg-secondary shadow-lg transition-all">
+                    Publicar Comentario
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- HISTORIAL MODAL -->
+    <div id="historialModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-4xl p-6 relative">
+
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Mi Historial de Citas</h3>
+                <button
+                    onclick="document.getElementById('historialModal').classList.add('hidden'); document.getElementById('historialModal').classList.remove('flex');"
+                    class="text-gray-500 hover:text-red-500">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-600 uppercase text-sm">
+                            <th class="p-4">Fecha</th>
+                            <th class="p-4">Mascota</th>
+                            <th class="p-4">Servicio</th>
+                            <th class="p-4">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr th:each="cita : ${misCitas}">
+                            <td class="p-4 text-gray-800 font-medium"
+                                th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                            <td class="p-4 text-gray-600" th:text="${cita.mascota.nombre}">Rex</td>
+                            <td class="p-4 text-blue-600" th:text="${cita.servicioNombre}">Vacuna</td>
+                            <td class="p-4">
+                                <span
+                                    th:class="'px-3 py-1 rounded-full text-xs font-bold ' + 
+                                (${cita.estado.name() == 'CONFIRMADA'} ? 'bg-green-100 text-green-700' : 
+                                (${cita.estado.name() == 'PENDIENTE'} ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'))"
+                                    th:text="${cita.estado}">
+                                    ESTADO
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(misCitas)}">
+                            <td colspan="4" class="p-8 text-center text-gray-500">
+                                <span class="material-symbols-outlined text-4xl mb-2">event_busy</span>
+                                <p>No tienes citas registradas.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESERVA MODAL -->
+    <div id="reservaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+
+            <button onclick="closeModal('reservaModal')"
+                class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Reservar Cita</h3>
+
+            <div th:if="${#lists.isEmpty(misMascotas)}" class="text-center py-8">
+                <div class="bg-yellow-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-4xl text-yellow-600">pets</span>
+                </div>
+                <h4 class="text-lg font-semibold text-gray-800 mb-2">¡Aún no tienes mascotas!</h4>
+                <p class="text-gray-500 text-sm mb-6">Para agendar una cita, primero necesitamos conocer a tu engreído.
+                </p>
+
+                <button onclick="closeModal('reservaModal'); openModal('mascotaPublicaModal')"
+                    class="w-full py-3 bg-primary text-white rounded-lg hover:bg-secondary font-bold shadow-lg transition-transform transform hover:scale-105 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Registrar Mascota Ahora
+                </button>
+            </div>
+
+            <form th:unless="${#lists.isEmpty(misMascotas)}" th:action="@{/citas/reservar}" method="post"
+                class="space-y-4">
+
+                <input type="hidden" id="reservaServicioId" name="servicioId">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Servicio Seleccionado</label>
+                    <input type="text" id="reservaServicioNombre" readonly
+                        class="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-gray-600 font-medium">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">¿Para quién es la cita?</label>
+                    <select name="mascota"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-primary"
+                        required>
+                        <option th:each="m : ${misMascotas}" th:value="${m.id}"
+                            th:text="${m.nombre + ' (' + m.especie + ')'}">
+                            Firulais (Perro)
+                        </option>
+                    </select>
+                    <div class="text-right mt-1">
+                        <a href="#" onclick="closeModal('reservaModal'); openModal('mascotaPublicaModal')"
+                            class="text-xs text-primary hover:underline font-medium">+ Agregar otra mascota</a>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Fecha Preferida</label>
+                    <input type="datetime-local" name="fechaHora" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary">
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit"
+                        class="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary font-bold shadow-md transition-colors">
+                        Confirmar Reserva
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de registro de mascota -->
+    <div id="mascotaPublicaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Registrar mi Mascota</h3>
+                <button onclick="closeModal('mascotaPublicaModal')" class="text-gray-500 hover:text-gray-700">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <form th:action="@{/mascotas/publica/guardar}" method="post" class="space-y-4">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" name="nombre" required
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Especie</label>
+                        <select name="especie" class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white">
+                            <option value="Perro">Perro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Ave">Ave</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Raza</label>
+                        <input type="text" name="raza" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Edad (Años)</label>
+                        <input type="number" name="edad" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Sexo</label>
+                    <div class="flex gap-6">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="sexo" value="Macho" checked
+                                class="mr-2 text-primary focus:ring-primary"> Macho
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="sexo" value="Hembra" class="mr-2 text-primary focus:ring-primary">
+                            Hembra
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 font-bold shadow-md">
+                    Guardar Mascota
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PARA LA COMPRA -->
+    <div id="pagoModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[60]">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+
+            <div class="bg-primary p-4 text-center">
+                <h3 class="text-white font-bold text-xl">Finalizar Pago</h3>
+                <p class="text-white/80 text-sm">Total a pagar: <span id="pagoTotalDisplay"
+                        class="font-bold text-white text-lg">S/ 0.00</span></p>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div class="text-center">
+                    <p class="text-gray-600 mb-2 font-medium">Escanea el QR para pagar</p>
+                    <div class="flex justify-center gap-4 mb-4">
+                        <div
+                            class="w-24 h-24 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 font-bold">
+                            YAPE</div>
+                        <div
+                            class="w-24 h-24 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold">
+                            PLIN</div>
+                    </div>
+                </div>
+
+                <form id="formPago" onsubmit="event.preventDefault(); enviarPedido();" class="space-y-4">
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Método de Pago</label>
+                        <select id="metodoPago" class="w-full border rounded-lg p-2 bg-gray-50">
+                            <option value="YAPE">Yape</option>
+                            <option value="PLIN">Plin</option>
+                            <option value="TRANSFERENCIA">Transferencia</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">N° Operación / Constancia</label>
+                        <input type="text" id="codigoOperacion" placeholder="Ej: 1234567" required
+                            class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="button" onclick="cerrarPago()"
+                            class="flex-1 py-3 text-gray-600 font-medium hover:bg-gray-100 rounded-xl">Cancelar</button>
+                        <button type="submit"
+                            class="flex-1 py-3 bg-primary text-white font-bold rounded-xl hover:bg-secondary shadow-lg">Confirmar
+                            Pago</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <button sec:authorize="isAuthenticated()" onclick="toggleCarrito()"
+        class="fixed bottom-5 left-5 z-40 bg-primary hover:bg-secondary text-white p-4 rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 group">
+        <span class="material-symbols-outlined text-2xl">shopping_cart</span>
+        <span id="cartCount"
+            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span>
+    </button>
+
+    <!-- carrito modal -->
+    <div id="carritoModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="toggleCarrito()"></div>
+
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform transition-transform duration-300 translate-x-full"
+            id="carritoPanel">
+            <div class="flex flex-col h-full">
+
+                <div class="p-6 border-b flex justify-between items-center bg-gray-50">
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <span class="material-symbols-outlined">shopping_bag</span> Tu Carrito
+                    </h2>
+                    <button onclick="toggleCarrito()" class="text-gray-500 hover:text-red-500">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+
+                <div id="carritoItems" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <p class="text-center text-gray-500 mt-10">Tu carrito está vacío 😢</p>
+                </div>
+
+                <div class="p-6 border-t bg-gray-50">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-600">Total a Pagar:</span>
+                        <span id="carritoTotal" class="text-2xl font-bold text-primary">S/ 0.00</span>
+                    </div>
+
+                    <div sec:authorize="isAuthenticated()">
+                        <button onclick="finalizarCompra()"
+                            class="w-full py-4 bg-primary text-white rounded-xl font-bold shadow-lg hover:bg-secondary transition-colors flex justify-center items-center gap-2">
+                            Pagar Ahora <span class="material-symbols-outlined">arrow_forward</span>
+                        </button>
+                    </div>
+
+                    <div sec:authorize="!isAuthenticated()">
+                        <a href="/login"
+                            class="block text-center w-full py-4 bg-gray-800 text-white rounded-xl font-bold hover:bg-gray-700">
+                            Inicia Sesión para Pagar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial de compras -->
+    <div id="ventasModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-4xl p-6 relative">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Mis Compras Realizadas</h3>
+                <button
+                    onclick="document.getElementById('ventasModal').classList.add('hidden'); document.getElementById('ventasModal').classList.remove('flex');"
+                    class="text-gray-500 hover:text-red-500">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-600 uppercase text-sm">
+                            <th class="p-4">Fecha</th>
+                            <th class="p-4">Método</th>
+                            <th class="p-4">Total</th>
+                            <th class="p-4">Estado</th>
+                            <th class="p-4">Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr th:each="v : ${misCompras}">
+                            <td class="p-4 text-gray-800" th:text="${#temporals.format(v.fecha, 'dd/MM/yyyy')}">Fecha
+                            </td>
+                            <td class="p-4 text-gray-600" th:text="${v.metodoPago}">YAPE</td>
+                            <td class="p-4 font-bold text-emerald-600" th:text="'S/ ' + ${v.total}">S/ 100</td>
+                            <td class="p-4">
+                                <span
+                                    th:class="'px-2 py-1 rounded text-xs font-bold ' + (${v.estado == 'COMPLETADA'} ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700')"
+                                    th:text="${v.estado}">ESTADO</span>
+                            </td>
+                            <td class="p-4 text-xs text-gray-500">
+                                <div th:each="d : ${v.detalles}">
+                                    <span th:text="${d.cantidad + 'x ' + d.nombreProducto}">Producto</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACTO MODAL -->
+    <div id="contactoModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[70]">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 relative transform transition-all scale-100">
+
+            <button onclick="closeModal('contactoModal')"
+                class="absolute top-4 right-4 text-gray-400 hover:text-red-500">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="material-symbols-outlined text-3xl text-primary">mail</span>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">Contáctanos</h3>
+                <p class="text-gray-500 text-sm">Estamos aquí para ayudarte. Envíanos un mensaje y te responderemos a tu
+                    correo.</p>
+            </div>
+
+            <form th:action="@{/contacto/enviar}" method="post" class="space-y-5">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre</label>
+                        <input type="text" name="nombre" required
+                            class="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Correo</label>
+                        <input type="email" name="correo" required placeholder="ejemplo@gmail.com"
+                            class="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none bg-gray-50">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Asunto</label>
+                    <select name="asunto"
+                        class="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary outline-none bg-gray-50">
+                        <option value="Consulta General">Consulta General</option>
+                        <option value="Citas y Reservas">Citas y Reservas</option>
+                        <option value="Emergencia">Emergencia</option>
+                        <option value="Sugerencia">Sugerencia</option>
+                        <option value="Reclamo">Reclamo</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Mensaje</label>
+                    <textarea name="mensaje" rows="4" required placeholder="Escribe tu consulta aquí..."
+                        class="w-full border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-transparent outline-none bg-gray-50 resize-none"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                    Enviar Mensaje
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <script src="/JS/globalToast.js"></script>
+    <script src="/JS/scriptReserva.js"></script>
+    <script src="/JS/scriptCarrito.js"></script>
+    <script src="/JS/scriptTestimonios.js"></script>
+
+
+</body>
+
+</html>

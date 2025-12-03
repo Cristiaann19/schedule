@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huellitas - Dashboard</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#10b981",
+                        secondary: "#059669",
+                        accent: "#34d399",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        }
+
+        /* Clase para ocultar secciones */
+        .hidden-section {
+            display: none;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.0/css/dataTables.tailwindcss.css">
+
+    <script src="https://cdn.datatables.net/2.0.0/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.0/js/dataTables.tailwindcss.js"></script>
+    <script src="../JS/scriptTablas.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../CSS/stylesTablas.css">
+
+</head>
+
+<body class="bg-gray-50 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <aside
+            class="w-64 bg-gradient-to-b from-gray-800 to-gray-900 text-white flex flex-col transition-all duration-300 flex-shrink-0">
+            <div class="p-6 border-b border-gray-700">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <span class="material-symbols-outlined text-white text-3xl">pets</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Huellitas</h1>
+                        <p class="text-xs text-gray-400">Panel Administrativo</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <div class="mb-4">
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Principal</p>
+                    <a href="#" onclick="showSection('dashboard', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white font-medium transition-colors">
+                        <span class="material-symbols-outlined text-xl">dashboard</span>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="mb-4">
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Gestión</p>
+                    <a href="#" onclick="showSection('citas', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">calendar_month</span>
+                        <span>Citas</span>
+                    </a>
+                    <a href="#" onclick="showSection('servicios', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">medical_services</span>
+                        <span>Servicios</span>
+                    </a>
+                    <a href="#" onclick="showSection('productos', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">inventory_2</span>
+                        <span>Productos</span>
+                    </a>
+                    <a href="#" onclick="showSection('ventas', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">shopping_cart</span>
+                        <span>Ventas</span>
+                    </a>
+                </div>
+
+                <div>
+                    <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">Personas y
+                        Mascotas</p>
+                    <a href="#" onclick="showSection('clientes', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">person</span>
+                        <span>Clientes</span>
+                    </a>
+                    <a href="#" onclick="showSection('trabajadores', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">work</span>
+                        <span>Trabajadores</span>
+                    </a>
+                    <a href="#" onclick="showSection('mascotas', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">pets</span>
+                        <span>Mascotas</span>
+                    </a>
+                    <a href="#" onclick="showSection('enfermedades', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">healing</span>
+                        <span>Enfermedades</span>
+                    </a>
+                    <a href="#" onclick="showSection('vacunas', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">vaccines</span>
+                        <span>Vacunas</span>
+                    </a>
+
+                    <div class="mt-4 pt-4 border-t border-gray-700">
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="text-red-500 hover:text-red-700 font-medium">
+                                Cerrar Sesión
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden">
+
+            <header class="bg-white border-b border-gray-200 px-8 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 id="page-title" class="text-2xl font-bold text-gray-800">Dashboard</h2>
+                        <p class="text-sm text-gray-500">Vista general del sistema</p>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="text-right hidden sm:block">
+                                <p class="text-sm font-semibold text-gray-800" th:text="${usuario}"></p>
+                                <p class="text-xs text-gray-500">Administrador</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold shadow-md"
+                                th:text="${usuario != null ? #strings.substring(usuario, 0, 1) : 'A'}"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto bg-gray-50 p-6 relative">
+
+                <div id="section-dashboard" class="content-section fade-in">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div
+                            class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <p class="text-sm text-gray-600 font-medium">Citas Hoy</p>
+                                    <h3 class="text-3xl font-bold text-gray-800 mt-1" th:text="${statsCitasHoy}">0</h3>
+                                </div>
+                                <div class="w-14 h-14 rounded-xl bg-cyan-500 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-3xl">calendar_today</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <p class="text-sm text-gray-600 font-medium">Clientes Activos</p>
+                                    <h3 class="text-3xl font-bold text-gray-800 mt-1" th:text="${statsClientes}">0</h3>
+                                </div>
+                                <div class="w-14 h-14 rounded-xl bg-blue-500 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-3xl">group</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <p class="text-sm text-gray-600 font-medium">Ventas del Mes</p>
+                                    <h3 class="text-3xl font-bold text-emerald-600 mt-1"
+                                        th:text="'S/ ' + ${#numbers.formatDecimal(statsVentasMes, 1, 'COMMA', 2, 'POINT')}">
+                                        S/ 0.00
+                                    </h3>
+                                </div>
+                                <div class="w-14 h-14 rounded-xl bg-primary flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-3xl">payments</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <p class="text-sm text-gray-600 font-medium">Mascotas</p>
+                                    <h3 class="text-3xl font-bold text-gray-800 mt-1" th:text="${statsMascotas}">0</h3>
+                                </div>
+                                <div class="w-14 h-14 rounded-xl bg-purple-500 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-3xl">pets</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-4">Resumen de Rendimiento</h3>
+                            <canvas id="miGrafico"></canvas>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-lg font-bold text-gray-800 mb-6">Citas de Hoy</h3>
+
+                            <div class="space-y-4">
+
+                                <div th:each="cita : ${listaCitasHoy}"
+                                    class="relative pl-8 pb-6 border-l-2 border-primary last:pb-0 last:border-transparent">
+
+                                    <div
+                                        class="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-primary border-4 border-white">
+                                    </div>
+
+                                    <div class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
+                                        <div class="flex items-start justify-between mb-2">
+                                            <div>
+                                                <p class="font-bold text-gray-800"
+                                                    th:text="${#temporals.format(cita.fechaHora, 'HH:mm a')}">10:00 AM
+                                                </p>
+
+                                                <p class="text-sm text-gray-600 mt-1 font-medium"
+                                                    th:text="${cita.mascota.nombre}">Firulais</p>
+
+                                                <p class="text-xs text-gray-500">
+                                                    <span th:text="${cita.servicioNombre}">Vacuna</span> -
+                                                    <span th:text="${cita.mascota.cliente.nombres}">Juan</span>
+                                                </p>
+                                            </div>
+
+                                            <span
+                                                th:class="'px-3 py-1 text-xs font-semibold rounded-full ' + 
+                        (${cita.estado.name() == 'CONFIRMADA'} ? 'bg-green-100 text-green-700' : 
+                        (${cita.estado.name() == 'PENDIENTE'} ? 'bg-yellow-100 text-yellow-700' : 
+                        (${cita.estado.name() == 'REALIZADA'} ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700')))"
+                                                th:text="${cita.estado}">
+                                                PENDIENTE
+                                            </span>
+                                        </div>
+
+                                        <button th:onclick="'editarCita(' + ${cita.id} + ')'"
+                                            class="text-xs text-primary hover:underline mt-1">
+                                            Ver detalles
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div th:if="${#lists.isEmpty(listaCitasHoy)}" class="text-center py-6 text-gray-500">
+                                    <span class="material-symbols-outlined text-3xl mb-2">event_available</span>
+                                    <p class="text-sm">No hay más citas programadas para hoy.</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="section-citas" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold">Agenda de Citas</h3>
+                        <button onclick="nuevaCita()"
+                            class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">calendar_add_on</span> Nueva Cita
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <table id="tablaCitas" class="w-full text-left datatable display" style="width:100%">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Fecha</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Paciente
+                                        (Mascota)</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Servicio</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Veterinario</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Estado</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Fecha</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr th:each="cita : ${citas}">
+                                    <td class="px-6 py-4 text-gray-800"
+                                        th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+
+                                    <td class="px-6 py-4">
+                                        <div class="font-medium" th:text="${cita.mascota.nombre}">Rex</div>
+                                        <div class="text-xs text-gray-500" th:text="${cita.mascota.cliente.nombres}">
+                                            Dueño</div>
+                                    </td>
+
+                                    <td class="px-6 py-4 text-blue-600 font-medium" th:text="${cita.servicioNombre}">
+                                        Vacuna</td>
+
+                                    <td class="px-6 py-4 text-gray-600"
+                                        th:text="${cita.veterinario != null ? cita.veterinario.nombres : 'Sin asignar'}">
+                                        Dr. House</td>
+                                    <td class="px-6 py-4">
+                                        <span th:switch="${cita.estado.name()}"
+                                            class="inline-block text-xs font-bold shadow-sm">
+
+                                            <span th:case="'CONFIRMADA'"
+                                                class="px-3 py-1 rounded-lg bg-green-100 text-green-700 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                                                Confirmada
+                                            </span>
+
+                                            <span th:case="'PENDIENTE'"
+                                                class="px-3 py-1 rounded-lg bg-yellow-100 text-yellow-700 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                                Pendiente
+                                            </span>
+
+                                            <span th:case="'REALIZADA'"
+                                                class="px-3 py-1 rounded-lg bg-blue-100 text-blue-700 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[16px]">done_all</span>
+                                                Realizada
+                                            </span>
+
+                                            <span th:case="'CANCELADA'"
+                                                class="px-3 py-1 rounded-lg bg-red-100 text-red-700 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[16px]">cancel</span>
+                                                Cancelada
+                                            </span>
+
+                                            <span th:case="*"
+                                                class="px-3 py-1 rounded-lg bg-gray-100 text-gray-700 flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-[16px]">help</span> -
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-bold"
+                                            th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}">
+                                            04/12/2025 10:00
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+
+                                            <button th:data-id="${cita.id}"
+                                                onclick="editarCita(this.getAttribute('data-id'))"
+                                                class="text-blue-600 hover:text-blue-800 transition-colors"
+                                                title="Editar Cita">
+                                                <span class="material-symbols-outlined">edit</span>
+                                            </button>
+
+                                            <a th:href="@{/admin/citas/eliminar/{id}(id=${cita.id})}"
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                onclick="return confirm('¿Estás seguro de eliminar/cancelar esta cita?');"
+                                                title="Eliminar Cita">
+                                                <span class="material-symbols-outlined">delete</span>
+                                            </a>
+                                            <button
+                                                th:if="${cita.estado.name() != 'REALIZADA' and cita.estado.name() != 'CANCELADA'}"
+                                                th:data-id="${cita.id}" th:data-mascota="${cita.mascota.id}"
+                                                th:data-nombre="${cita.mascota.nombre}"
+                                                onclick="abrirConsulta(this.getAttribute('data-id'), this.getAttribute('data-mascota'), this.getAttribute('data-nombre'))"
+                                                class="text-green-600 hover:text-green-800 mr-2"
+                                                title="Atender Paciente">
+                                                <span class="material-symbols-outlined">stethoscope</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="section-servicios" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold">Catálogo de Servicios</h3>
+                        <button onclick="nuevoServicio()"
+                            class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">add</span> Nuevo Servicio
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <table id="tablaServicios" class="w-full text-left datatable display" style="width:100%">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Icono</th>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Nombre</th>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Precio</th>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr th:each="serv : ${servicios}">
+                                    <td class="px-6 py-4">
+                                        <div
+                                            th:class="'w-10 h-10 rounded-lg flex items-center justify-center text-white bg-gradient-to-br ' + ${serv.colorInicio} + ' ' + ${serv.colorFin}">
+                                            <span class="material-symbols-outlined text-xl"
+                                                th:text="${serv.icono}">icon</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="font-medium text-gray-800" th:text="${serv.nombre}">Nombre</div>
+                                        <div class="text-sm text-gray-500 truncate w-48" th:text="${serv.descripcion}">
+                                            Desc</div>
+                                    </td>
+                                    <td class="px-6 py-4 font-bold text-gray-700" th:text="'S/ ' + ${serv.precio}">0.00
+                                    </td>
+                                    <td class="px-6 py-4 flex gap-2">
+                                        <button th:data-id="${serv.id}"
+                                            onclick="editarServicio(this.getAttribute('data-id'))"
+                                            class="text-blue-600 hover:text-blue-800">
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                        <a th:href="@{/admin/servicios/eliminar/{id}(id=${serv.id})}"
+                                            class="text-red-600 hover:text-red-800"
+                                            onclick="return confirm('¿Eliminar servicio?')">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="section-productos" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold">Inventario de Productos</h3>
+                        <button onclick="nuevoProducto()"
+                            class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">add</span> Nuevo Producto
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <table id="tablaProductos" class="w-full text-left datatable display" style="width:100%">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Producto</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Precio</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Stock</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr th:each="prod : ${productos}">
+                                    <td class="px-6 py-4">
+                                        <div class="font-medium text-gray-800" th:text="${prod.nombre}">Nombre</div>
+                                        <div class="text-sm text-gray-500" th:text="${prod.descripcion}">Desc</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-emerald-600 font-bold" th:text="'S/ ' + ${prod.precio}">S/
+                                        0.00</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-bold"
+                                            th:text="${prod.stock}">0</span>
+                                    </td>
+                                    <td class="px-6 py-4 flex gap-2">
+                                        <button th:data-id="${prod.id}"
+                                            onclick="editarProducto(this.getAttribute('data-id'))"
+                                            class="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                        <a th:href="@{/admin/productos/eliminar/{id}(id=${prod.id})}"
+                                            class="text-red-600 hover:text-red-800"
+                                            onclick="return confirm('¿Estás seguro de eliminar este producto?');">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="section-clientes" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold">Clientes</h3>
+                        <button onclick="nuevoCliente()"
+                            class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[20px]">add</span>
+                            Nuevo Cliente
+                        </button>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <table id="tablaClientes" class="w-full text-left datatable display" style="width:100%">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">DNI</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Nombre</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Correo </th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Teléfono</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr th:each="cliente : ${clientes}" class="hover:bg-gray-50 transition-colors">
+
+                                    <td class="px-6 py-4 text-gray-800 font-medium" th:text="${cliente.dni}">
+                                        00000000
+                                    </td>
+
+                                    <td class="px-6 py-4 text-gray-600"
+                                        th:text="${cliente.nombres + ' ' + cliente.apellidos}">
+                                        Nombre Completo
+                                    </td>
+
+                                    <td class="px-6 py-4 text-gray-600" th:text="${cliente.correo}">
+                                        correo@ejemplo.com
+                                    </td>
+
+                                    <td class="px-6 py-4 text-gray-600" th:text="${cliente.telefono}">
+                                        999 999 999
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <button th:onclick="'editarCliente(' + ${cliente.id} + ')'"
+                                                class="text-blue-600 hover:text-blue-800 mr-4 font-medium transition-colors"
+                                                title="Editar">
+                                                <span class="material-symbols-outlined text-[20px]">edit</span>
+                                            </button>
+
+                                            <a th:href="@{/admin/clientes/eliminar/{id}(id=${cliente.id})}"
+                                                class="text-red-600 hover:text-red-800 font-medium transition-colors"
+                                                onclick="return confirm('¿Estás seguro de que deseas eliminar a este cliente?');">
+                                                Eliminar
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr th:if="${#lists.isEmpty(clientes)}">
+                                    <td colspan="4" class="px-6 py-10 text-center text-gray-500 bg-gray-50/50">
+                                        <p>No se encontraron clientes registrados.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="section-trabajadores" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold">Personal de la Clínica</h3>
+                        <button onclick="nuevoTrabajador()"
+                            class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">person_add</span> Nuevo Trabajador
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <table id="tablaTrabajadores" class="w-full text-left datatable display" style="width:100%">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Nombre</th>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Rol/Especialidad
+                                    </th>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Contacto</th>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Estado</th>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr th:each="trab : ${trabajadores}">
+                                    <td class="px-6 py-4">
+                                        <div class="font-medium text-gray-800"
+                                            th:text="${trab.nombres + ' ' + trab.apellidos}">Nombre</div>
+                                        <div class="text-xs text-gray-500" th:text="'DNI: ' + ${trab.dni}">DNI</div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600" th:text="${trab.especialidad}">Vet</td>
+                                    <td class="px-6 py-4 text-sm">
+                                        <div th:text="${trab.telefono}">Tel</div>
+                                        <div th:text="${trab.correo}" class="text-gray-400 text-xs">Email</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span th:if="${trab.estadoLaboral == 'ACTIVO'}"
+                                            class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Activo</span>
+                                        <span th:unless="${trab.estadoLaboral == 'ACTIVO'}"
+                                            class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold">Inactivo</span>
+                                    </td>
+                                    <td class="px-6 py-4 flex gap-2">
+                                        <button th:data-id="${trab.id}"
+                                            onclick="editarTrabajador(this.getAttribute('data-id'))"
+                                            class="text-blue-600 hover:text-blue-800">
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                        <a th:href="@{/admin/trabajadores/eliminar/{id}(id=${trab.id})}"
+                                            class="text-red-600 hover:text-red-800"
+                                            onclick="return confirm('¿Eliminar?')">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="section-mascotas" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold">Pacientes (Mascotas)</h3>
+                        <button onclick="nuevaMascota()"
+                            class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary flex items-center gap-2">
+                            <span class="material-symbols-outlined">pets</span> Nueva Mascota
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-6">
+                        <table id="tablaMascotas" class="w-full datatable text-left display my-6" style="width:100%">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Nombre</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Especie/Raza
+                                    </th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Dueño</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Edad</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr th:each="m : ${mascotas}">
+                                    <td class="px-6 py-4 font-medium text-gray-800" th:text="${m.nombre}">Firulais</td>
+                                    <td class="px-6 py-4">
+                                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold mr-1"
+                                            th:text="${m.especie}">Perro</span>
+                                        <span class="text-gray-500 text-sm" th:text="${m.raza}">Labrador</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600">
+                                        <div class="flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-gray-400 text-sm">person</span>
+                                            <span th:text="${m.cliente.nombres + ' ' + m.cliente.apellidos}">Juan
+                                                Perez</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600" th:text="${m.edad + ' años'}">5 años</td>
+                                    <td class="px-6 py-4 flex gap-2">
+                                        <button th:data-id="${m.id}"
+                                            onclick="editarMascota(this.getAttribute('data-id'))"
+                                            class="text-blue-600 hover:text-blue-800">
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                        <a th:href="@{/admin/mascotas/eliminar/{id}(id=${m.id})}"
+                                            class="text-red-600 hover:text-red-800"
+                                            onclick="return confirm('¿Eliminar mascota?')">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </a>
+                                        <button th:data-id="${m.id}" th:data-nombre="${m.nombre}"
+                                            onclick="verHistorialMascota(this.getAttribute('data-id'), this.getAttribute('data-nombre'))"
+                                            class="text-purple-600 hover:text-purple-800 bg-purple-50 p-1.5 rounded-lg transition-colors"
+                                            title="Ver Historia Clínica">
+                                            <span class="material-symbols-outlined text-[20px]">clinical_notes</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="section-ventas" class="content-section hidden-section">
+
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-gray-800">Registro de Ventas</h3>
+
+                        <a href="/admin/ventas/reporte/excel"
+                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center gap-2 transition-colors shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">table_view</span>
+                            Exportar Excel
+                        </a>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        <table id="tablaVentas" class="w-full text-left datatable display" style="width:100%">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">ID</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Fecha</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Cliente</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Pago</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Estado</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Total</th>
+                                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr th:each="v : ${ventas}" class="hover:bg-gray-50 transition-colors">
+
+                                    <td class="px-6 py-4 text-gray-500 font-mono text-xs" th:text="${v.id}">1</td>
+
+                                    <td class="px-6 py-4 text-sm"
+                                        th:text="${#temporals.format(v.fecha, 'dd/MM/yyyy HH:mm')}">
+                                        01/12/2025
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <div class="font-medium text-gray-800"
+                                            th:text="${v.cliente.nombres + ' ' + v.cliente.apellidos}">Nombre</div>
+                                        <div class="text-xs text-gray-500" th:text="${v.cliente.dni}">DNI</div>
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <div class="flex flex-col gap-1">
+                                            <span class="text-xs font-bold px-2 py-0.5 rounded w-fit"
+                                                th:classappend="${v.metodoPago == 'YAPE' ? 'bg-purple-100 text-purple-700' : (v.metodoPago == 'PLIN' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700')}"
+                                                th:text="${v.metodoPago}">YAPE</span>
+
+                                            <span th:if="${v.codigoOperacion}" class="text-xs text-gray-500 font-mono"
+                                                th:text="'Op: ' + ${v.codigoOperacion}">123456</span>
+                                        </div>
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <span th:if="${v.estado == 'COMPLETADA'}"
+                                            class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold flex items-center gap-1 w-fit">
+                                            <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                            Pagado
+                                        </span>
+
+                                        <span th:unless="${v.estado == 'COMPLETADA'}"
+                                            class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold flex items-center gap-1 w-fit">
+                                            <span class="material-symbols-outlined text-[14px]">schedule</span> Por
+                                            Validar
+                                        </span>
+                                    </td>
+
+                                    <td class="px-6 py-4 text-emerald-600 font-bold"
+                                        th:text="'S/ ' + ${#numbers.formatDecimal(v.total, 1, 'COMMA', 2, 'POINT')}">
+                                        S/ 135.00
+                                    </td>
+
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+
+                                            <a th:if="${v.estado != 'COMPLETADA'}"
+                                                th:href="@{/admin/ventas/aprobar/{id}(id=${v.id})}"
+                                                onclick="return confirm('¿Confirmas que recibiste el dinero?')"
+                                                class="text-green-600 hover:text-green-800 bg-green-50 p-2 rounded-lg transition-colors flex items-center justify-center tooltip"
+                                                title="Aprobar Pago">
+                                                <span class="material-symbols-outlined">verified</span>
+                                            </a>
+
+                                            <button th:onclick="'verDetalleVenta(' + ${v.id} + ')'"
+                                                class="text-gray-500 hover:text-blue-600 p-2 transition-colors"
+                                                title="Ver Detalle">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </button>
+
+                                            <a th:if="${v.estado == 'COMPLETADA'}"
+                                                th:href="@{/admin/ventas/boleta/{id}(id=${v.id})}"
+                                                class="text-purple-600 hover:text-purple-800 p-2 transition-colors tooltip"
+                                                title="Descargar Boleta" target="_blank">
+                                                <span class="material-symbols-outlined">print</span>
+                                            </a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="section-enfermedades" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-gray-800">Guía Médica (Enfermedades)</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+                        <div th:each="enf : ${enfermedades}"
+                            class="bg-white p-6 rounded-xl border border-gray-200 flex flex-col items-center text-center hover:shadow-lg transition-all relative group">
+
+                            <a th:href="@{/admin/enfermedades/eliminar/{id}(id=${enf.id})}"
+                                onclick="return confirm('¿Eliminar esta enfermedad?')"
+                                class="absolute top-3 right-3 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="material-symbols-outlined">delete</span>
+                            </a>
+
+                            <div th:class="'w-16 h-16 rounded-full flex items-center justify-center mb-4 ' + 
+                (${enf.especie == 'Perro'} ? 'bg-blue-100 text-blue-600' : 
+                (${enf.especie == 'Gato'} ? 'bg-purple-100 text-purple-600' : 'bg-orange-100 text-orange-600'))">
+                                <span class="material-symbols-outlined text-3xl">
+                                    <th:block th:if="${enf.especie == 'Perro'}">pets</th:block>
+                                    <th:block th:if="${enf.especie == 'Gato'}">cruelty_free</th:block>
+                                    <th:block th:if="${enf.especie != 'Perro' and enf.especie != 'Gato'}">healing
+                                    </th:block>
+                                </span>
+                            </div>
+
+                            <h3 class="font-bold text-lg text-gray-800" th:text="${enf.nombre}">Parvovirus</h3>
+
+                            <span th:class="'mt-2 px-3 py-1 rounded-full text-xs font-bold ' + 
+                  (${enf.gravedad == 'Alta'} ? 'bg-red-100 text-red-700' : 
+                  (${enf.gravedad == 'Media'} ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'))"
+                                th:text="${enf.gravedad}">Alta</span>
+
+                            <p class="text-sm text-gray-500 mt-3 line-clamp-3" th:text="${enf.descripcion}">
+                                Descripción breve de la enfermedad...
+                            </p>
+
+                            <button th:data-id="${enf.id}" onclick="editarEnfermedad(this.getAttribute('data-id'))"
+                                class="mt-auto w-full border border-gray-300 text-gray-600 hover:border-primary hover:text-primary hover:bg-emerald-50 py-2 rounded-lg transition-colors mt-4">
+                                Editar
+                            </button>
+                        </div>
+
+                        <div onclick="nuevaEnfermedad()"
+                            class="bg-gray-50 p-6 rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-center hover:border-primary hover:bg-white transition-all cursor-pointer min-h-[280px]">
+                            <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">add_circle</span>
+                            <h3 class="font-bold text-gray-500">Registrar Nueva Enfermedad</h3>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="section-vacunas" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-gray-800">Catálogo de Vacunas</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+                        <div th:each="vac : ${vacunas}"
+                            class="bg-white p-6 rounded-xl border border-gray-200 flex flex-col hover:shadow-lg transition-all relative group">
+
+                            <a th:href="@{/admin/vacunas-catalogo/eliminar/{id}(id=${vac.id})}"
+                                onclick="return confirm('¿Eliminar del catálogo?')"
+                                class="absolute top-3 right-3 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="material-symbols-outlined">delete</span>
+                            </a>
+
+                            <div class="flex items-center gap-4 mb-4">
+                                <div
+                                    class="w-12 h-12 rounded-lg bg-cyan-100 text-cyan-600 flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-outlined text-2xl">vaccines</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 leading-tight" th:text="${vac.nombre}">Nobivac
+                                    </h4>
+                                    <p class="text-xs text-gray-500 uppercase tracking-wide"
+                                        th:text="${vac.fabricante}">MSD</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2 mb-4 flex-grow">
+                                <div class="flex justify-between text-sm border-b border-gray-50 pb-1">
+                                    <span class="text-gray-500">Previene:</span>
+                                    <span class="font-medium text-gray-700 text-right"
+                                        th:text="${vac.enfermedadAsociada}">Parvo</span>
+                                </div>
+                                <div class="flex justify-between text-sm border-b border-gray-50 pb-1">
+                                    <span class="text-gray-500">Edad Rec:</span>
+                                    <span class="font-medium text-gray-700"><span
+                                            th:text="${vac.edadRecomendada}">2</span> meses</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-500">Dosis:</span>
+                                    <span class="px-2 py-0.5 bg-gray-100 rounded text-xs font-bold text-gray-600"
+                                        th:text="${vac.dosis} + ' dosis'">1 dosis</span>
+                                </div>
+                            </div>
+
+                            <button th:data-id="${vac.id}" onclick="editarVacunaCatalogo(this.getAttribute('data-id'))"
+                                class="w-full border border-gray-200 text-gray-600 hover:bg-cyan-50 hover:text-cyan-600 hover:border-cyan-200 py-2 rounded-lg transition-colors text-sm font-medium">
+                                Editar Ficha
+                            </button>
+                        </div>
+
+                        <div onclick="nuevaVacunaCatalogo()"
+                            class="bg-gray-50 p-6 rounded-xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-center hover:border-cyan-500 hover:bg-cyan-50/30 transition-all cursor-pointer min-h-[200px]">
+                            <div
+                                class="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center mb-3 text-gray-400 group-hover:text-cyan-500">
+                                <span class="material-symbols-outlined text-3xl">add</span>
+                            </div>
+                            <h3 class="font-bold text-gray-600">Registrar Vacuna</h3>
+                            <p class="text-xs text-gray-400 mt-1">Añadir al inventario</p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL DE CLIENTES -->
+    <div id="clienteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800" id="modalTitle">Nuevo Cliente</h3>
+                <button onclick="closeModal('clienteModal')" class="text-gray-500 hover:text-gray-700">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="clienteForm" th:action="@{/admin/clientes/guardar}" method="post">
+                <input type="hidden" id="clienteId" name="id">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">DNI</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="clienteDni" name="dni" required maxlength="8"
+                                class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <button type="button" onclick="buscarReniec()"
+                                class="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600">
+                                <span class="material-symbols-outlined text-sm">search</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombres</label>
+                            <input type="text" id="clienteNombres" name="nombres" required
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Apellidos</label>
+                            <input type="text" id="clienteApellidos" name="apellidos" required
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                        <input type="tel" id="clienteTelefono" name="telefono"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Correo</label>
+                        <input type="email" id="clienteCorreo" name="correo"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+                        <input type="text" id="clienteDireccion" name="direccion"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('clienteModal')"
+                        class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
+                    <button type="submit"
+                        class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE LOS PRODUCTOS -->
+    <div id="productoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="modalTitleProd">Producto</h3>
+                <button onclick="closeModal('productoModal')" class="text-gray-500 hover:text-gray-700"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <form id="productoForm" th:action="@{/admin/productos/guardar}" method="post" class="space-y-4">
+                <input type="hidden" id="prodId" name="id">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input type="text" id="prodNombre" name="nombre" required class="w-full border p-2 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                    <textarea id="prodDesc" name="descripcion" class="w-full border p-2 rounded-lg"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Precio (S/)</label>
+                        <input type="number" step="0.01" id="prodPrecio" name="precio" required
+                            class="w-full border p-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Stock</label>
+                        <input type="number" id="prodStock" name="stock" required class="w-full border p-2 rounded-lg">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Imagen del Producto</label>
+
+                    <div class="flex items-center gap-4">
+                        <label
+                            class="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg border border-gray-300 transition flex items-center gap-2">
+                            <span class="material-symbols-outlined">cloud_upload</span>
+                            <span>Subir Foto</span>
+                            <input type="file" id="fileInput" class="hidden" accept="image/*"
+                                onchange="subirImagenCloudinary()">
+                        </label>
+
+                        <span id="uploadStatus" class="text-xs text-gray-500">Sin archivo</span>
+                    </div>
+
+                    <div id="previewContainer"
+                        class="mt-3 hidden relative w-full h-32 bg-gray-50 rounded-lg border border-gray-200 flex justify-center items-center overflow-hidden">
+                        <img id="imgPreview" src="" class="h-full object-contain">
+                    </div>
+
+                    <input type="hidden" id="prodImg" name="imagenUrl">
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary">Guardar
+                    Producto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL SERVICIOS -->
+    <div id="servicioModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="modalTitleServ">Servicio</h3>
+                <button onclick="closeModal('servicioModal')" class="text-gray-500 hover:text-gray-700"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <form id="servicioForm" th:action="@{/admin/servicios/guardar}" method="post" class="space-y-4">
+                <input type="hidden" id="servId" name="id">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input type="text" id="servNombre" name="nombre" required class="w-full border p-2 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Descripción</label>
+                    <textarea id="servDesc" name="descripcion" class="w-full border p-2 rounded-lg"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Precio (S/)</label>
+                        <input type="number" step="0.01" id="servPrecio" name="precio" required
+                            class="w-full border p-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Icono (Google Font)</label>
+                        <input type="text" id="servIcono" name="icono" placeholder="ej: pets" required
+                            class="w-full border p-2 rounded-lg">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Color Inicio</label>
+                        <input type="text" id="servColorIni" name="colorInicio" placeholder="from-blue-500"
+                            class="w-full border p-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Color Fin</label>
+                        <input type="text" id="servColorFin" name="colorFin" placeholder="to-cyan-500"
+                            class="w-full border p-2 rounded-lg">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary">Guardar
+                    Servicio</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE TRABAJADORES -->
+    <div id="trabajadorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="modalTitleTrab">Nuevo Trabajador</h3>
+                <button onclick="closeModal('trabajadorModal')" class="text-gray-500"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <form id="trabajadorForm" th:action="@{/admin/trabajadores/guardar}" method="post" class="space-y-4">
+                <input type="hidden" id="trabId" name="id">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">DNI</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="trabDni" name="dni" required maxlength="8"
+                            class="flex-1 border p-2 rounded-lg">
+                        <button type="button" onclick="buscarReniecTrabajador()"
+                            class="bg-blue-500 text-white px-3 rounded-lg"><span
+                                class="material-symbols-outlined">search</span></button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombres</label>
+                        <input type="text" id="trabNombres" name="nombres" required
+                            class="w-full border p-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Apellidos</label>
+                        <input type="text" id="trabApellidos" name="apellidos" required
+                            class="w-full border p-2 rounded-lg">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Especialidad</label>
+                        <select id="trabEspecialidad" name="especialidad" class="w-full border p-2 rounded-lg bg-white">
+                            <option value="Veterinario">Veterinario General</option>
+                            <option value="Cirujano">Cirujano</option>
+                            <option value="Asistente">Asistente</option>
+                            <option value="Estilista">Estilista (Grooming)</option>
+                            <option value="Recepcionista">Recepcionista</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Estado</label>
+                        <select id="trabEstado" name="estadoLaboral" class="w-full border p-2 rounded-lg bg-white">
+                            <option value="ACTIVO">Activo</option>
+                            <option value="VACACIONES">Vacaciones</option>
+                            <option value="INACTIVO">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+                        <input type="text" id="trabTelefono" name="telefono" class="w-full border p-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Correo</label>
+                        <input type="email" id="trabCorreo" name="correo" class="w-full border p-2 rounded-lg">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Horario Disponible</label>
+                    <input type="text" id="trabHorario" name="horarioDisponible" placeholder="Ej: Lun-Vie 9am a 6pm"
+                        class="w-full border p-2 rounded-lg">
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary">Guardar
+                    Personal</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE CITAS -->
+    <div id="citaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="modalTitleCita">Agendar Cita</h3>
+                <button onclick="closeModal('citaModal')" class="text-gray-500"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+
+            <form id="citaForm" th:action="@{/admin/citas/guardar}" method="post" class="space-y-4">
+                <input type="hidden" id="citaId" name="id">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Fecha y Hora</label>
+                    <input type="datetime-local" name="fechaHora" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Mascota</label>
+                        <select name="mascota"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none">
+                            <option value="">Seleccione...</option>
+                            <option th:each="m : ${mascotas}" th:value="${m.id}"
+                                th:text="${m.nombre + ' (' + m.cliente.nombres + ')'}">
+                                Rex (Juan Perez)
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Veterinario</label>
+                        <select name="veterinario"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none">
+                            <option value="">Cualquiera (Automático)</option>
+                            <option th:each="doc : ${trabajadores}"
+                                th:if="${doc.especialidad == 'Veterinario' and doc.estadoLaboral != null and doc.estadoLaboral.toString() == 'ACTIVO'}"
+                                th:value="${doc.id}" th:text="${doc.nombres}">
+                                Dr. Juan
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Servicio</label>
+                        <select name="servicioId"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none" required>
+                            <option value="">Seleccione...</option>
+                            <option th:each="serv : ${servicios}" th:value="${serv.id}"
+                                th:text="${serv.nombre + ' - S/' + serv.precio}">
+                                Consulta
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Estado</label>
+                        <select name="estado"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none font-bold text-gray-600">
+                            <option value="PENDIENTE">🟡 Pendiente</option>
+                            <option value="CONFIRMADA">🟢 Confirmada</option>
+                            <option value="REALIZADA">🔵 Realizada</option>
+                            <option value="CANCELADA">🔴 Cancelada</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Motivo / Notas</label>
+                    <textarea name="motivo" rows="2"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none"></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary font-bold shadow-md transition-all">
+                    Guardar Cita
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE MASCOTAS -->
+    <div id="mascotaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold" id="modalTitleMascota">Nueva Mascota</h3>
+                <button onclick="closeModal('mascotaModal')" class="text-gray-500"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+            <form id="mascotaForm" th:action="@{/admin/mascotas/guardar}" method="post" class="space-y-4">
+                <input type="hidden" id="mascotaId" name="id">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Dueño (Cliente)</label>
+                    <select id="mascotaCliente" name="cliente" class="w-full border p-2 rounded-lg bg-white" required>
+                        <option value="">Seleccione un dueño...</option>
+                        <option th:each="cli : ${clientes}" th:value="${cli.id}"
+                            th:text="${cli.dni + ' - ' + cli.nombres + ' ' + cli.apellidos}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" id="mascotaNombre" name="nombre" required
+                            class="w-full border p-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Especie</label>
+                        <select id="mascotaEspecie" name="especie" class="w-full border p-2 rounded-lg bg-white">
+                            <option value="Perro">Perro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Ave">Ave</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Raza</label>
+                        <input type="text" id="mascotaRaza" name="raza" class="w-full border p-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Edad (Años)</label>
+                        <input type="number" id="mascotaEdad" name="edad" class="w-full border p-2 rounded-lg">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Sexo</label>
+                    <div class="flex gap-4 mt-2">
+                        <label class="flex items-center"><input type="radio" name="sexo" value="Macho" checked
+                                class="mr-2"> Macho</label>
+                        <label class="flex items-center"><input type="radio" name="sexo" value="Hembra" class="mr-2">
+                            Hembra</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Observaciones</label>
+                    <textarea id="mascotaObs" name="observaciones" rows="2"
+                        class="w-full border p-2 rounded-lg"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary">Guardar
+                    Mascota</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE VENTAS -->
+    <div id="ventaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Detalle de Venta #<span id="ventaIdDisplay"></span></h3>
+                <button onclick="closeModal('ventaModal')" class="text-gray-500"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+
+            <div class="space-y-3">
+                <div class="bg-gray-50 p-3 rounded">
+                    <p><strong>Cliente:</strong> <span id="ventaCliente"></span></p>
+                    <p><strong>Fecha:</strong> <span id="ventaFecha"></span></p>
+                    <p><strong>Pago:</strong> <span id="ventaMetodo"></span> (Op: <span id="ventaCodigo"></span>)</p>
+                </div>
+
+                <h4 class="font-bold border-b pb-2">Productos:</h4>
+                <ul id="ventaProductosLista" class="text-sm space-y-2 max-h-40 overflow-y-auto">
+                </ul>
+
+                <div class="flex justify-between items-center pt-4 border-t mt-4">
+                    <span class="text-lg font-bold">Total:</span>
+                    <span class="text-2xl font-bold text-emerald-600" id="ventaTotal">S/ 0.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ENFERMEDAD -->
+    <div id="enfermedadModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl shadow-lg w-96 relative">
+            <button onclick="closeModal('enfermedadModal')"
+                class="absolute top-4 right-4 text-gray-500 hover:text-red-500">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+
+            <h3 class="text-xl font-bold mb-6 text-gray-800">Registrar Enfermedad</h3>
+
+            <form th:action="@{/admin/enfermedades/guardar}" method="post" class="space-y-4">
+                <input type="hidden" name="id" id="enfId">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                    <input type="text" name="nombre"
+                        class="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-primary outline-none"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                    <textarea name="descripcion" rows="3"
+                        class="w-full border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-primary outline-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Especie</label>
+                        <select name="especie" class="w-full border border-gray-300 p-2 rounded-lg bg-white">
+                            <option value="Perro">Perro</option>
+                            <option value="Gato">Gato</option>
+                            <option value="Ambos">Ambos</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Gravedad</label>
+                        <select name="gravedad" class="w-full border border-gray-300 p-2 rounded-lg bg-white">
+                            <option value="Alta">Alta</option>
+                            <option value="Media">Media</option>
+                            <option value="Baja">Baja</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary font-bold shadow-md transition-all">
+                    Guardar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL VACUNAS -->
+    <div id="vacunaCatalogoModal"
+        class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md relative transform transition-all scale-100">
+            <button onclick="closeModal('vacunaCatalogoModal')"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-cyan-100 p-2 rounded-lg text-cyan-600">
+                    <span class="material-symbols-outlined">syringe</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Ficha de Vacuna</h3>
+            </div>
+
+            <form th:action="@{/admin/vacunas-catalogo/guardar}" method="post" class="space-y-4">
+                <input type="hidden" name="id" id="vacCatId">
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Comercial</label>
+                    <input type="text" id="vacNombre" name="nombre" placeholder="Ej: Nobivac Puppy"
+                        class="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none"
+                        required>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Fabricante</label>
+                        <input type="text" id="vacFabricante" name="fabricante" placeholder="Ej: MSD"
+                            class="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Dosis Req.</label>
+                        <input type="number" id="vacDosis" name="dosis" value="1" min="1"
+                            class="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Enfermedad Asociada</label>
+                    <input type="text" id="vacEnfermedad" name="enfermedadAsociada" placeholder="Ej: Parvovirus"
+                        class="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none"
+                        required>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Edad Recomendada (Meses)</label>
+                    <div class="relative">
+                        <input type="number" id="vacEdad" name="edadRecomendada"
+                            class="w-full border border-gray-300 p-2.5 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none pl-10">
+                        <span class="absolute left-3 top-2.5 text-gray-400 font-bold">M</span>
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-cyan-600 text-white py-3 rounded-xl font-bold hover:bg-cyan-700 shadow-lg transition-transform hover:scale-[1.02]">
+                    Guardar Ficha
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CONSULTA MODAL -->
+    <div id="consultaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-[70]">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-2xl p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Consulta Médica: <span id="consultaPaciente"
+                        class="text-primary"></span></h3>
+                <button onclick="closeModal('consultaModal')" class="text-gray-500"><span
+                        class="material-symbols-outlined">close</span></button>
+            </div>
+
+            <form th:action="@{/admin/historial/guardar}" method="post" class="space-y-4">
+                <input type="hidden" name="citaId" id="consultaCitaId">
+                <input type="hidden" name="mascotaId" id="consultaMascotaId">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Diagnóstico (Enfermedad)</label>
+                        <select name="enfermedadDetectada" class="w-full border p-2 rounded-lg">
+                            <option value="">-- Ninguna / Sana --</option>
+                            <option th:each="e : ${enfermedades}" th:value="${e.nombre}"
+                                th:text="${e.nombre + ' (' + e.gravedad + ')'}"></option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Vacuna Aplicada</label>
+                        <select name="vacunaAplicada" class="w-full border p-2 rounded-lg">
+                            <option value="">-- Ninguna --</option>
+                            <option th:each="v : ${vacunas}" th:value="${v.nombre}" th:text="${v.nombre}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Peso Actual (Kg)</label>
+                    <input type="number" step="0.1" name="peso" class="w-full border p-2 rounded-lg"
+                        placeholder="Ej: 12.5">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Observaciones / Diagnóstico
+                        Detallado</label>
+                    <textarea name="diagnostico" rows="3" class="w-full border p-2 rounded-lg"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tratamiento / Receta</label>
+                    <textarea name="tratamiento" rows="3" class="w-full border p-2 rounded-lg"
+                        placeholder="Ej: Amoxicilina cada 8 horas..."></textarea>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary font-bold shadow-lg">
+                    Finalizar Consulta
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE HISTORIAL MEDICO -->
+    <div id="historialMascotaModal"
+        class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[80] backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl h-[80vh] flex flex-col relative">
+
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50 rounded-t-2xl">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">pets</span>
+                        Historial de <span id="historialNombreMascota" class="text-primary">Firulais</span>
+                    </h3>
+                    <p class="text-sm text-gray-500 mt-1">Expediente médico completo</p>
+                </div>
+                <button onclick="closeModal('historialMascotaModal')"
+                    class="text-gray-400 hover:text-red-500 transition-colors">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-8 bg-slate-50" id="contenedorHistorial">
+                <p class="text-center text-gray-400">Cargando historial...</p>
+            </div>
+
+            <div class="p-4 border-t border-gray-100 bg-white rounded-b-2xl text-right">
+                <button onclick="closeModal('historialMascotaModal')"
+                    class="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+                    Cerrar Expediente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <script src="../JS/globalToast.js"></script>
+    <script src="../JS/scriptNavegacion.js"></script>
+    <script src="../JS/scriptClientes.js"></script>
+    <script src="../JS/scriptProductos.js"></script>
+    <script src="../JS/scriptServices.js"></script>
+    <script src="../JS/scriptEmployee.js"></script>
+    <script src="../JS/scriptCitas.js"></script>
+    <script src="../JS/scriptCitas2.js"></script>
+    <script src="../JS/scriptMascotas.js"></script>
+    <script src="../JS/scriptVenta.js"></script>
+    <script src="../JS/scriptGraficos.js"></script>
+    <script src="../JS/scriptEnfermedades.js"></script>
+    <script src="../JS/scriptVacunas.js"></script>
+    <script src="../JS/scriptImagen.js"></script>
+
+
+</body>
+
+</html>
