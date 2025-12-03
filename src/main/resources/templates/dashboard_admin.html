@@ -1256,13 +1256,22 @@
                 <input type="hidden" id="mascotaId" name="id">
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Dueño (Cliente)</label>
-                    <select id="mascotaCliente" name="cliente" class="w-full border p-2 rounded-lg bg-white" required>
-                        <option value="">Seleccione un dueño...</option>
-                        <option th:each="cli : ${clientes}" th:value="${cli.id}"
-                            th:text="${cli.dni + ' - ' + cli.nombres + ' ' + cli.apellidos}">
-                        </option>
-                    </select>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Dueño (Cliente)</label>
+                    <div class="flex gap-2">
+                        <select id="mascotaCliente" name="cliente"
+                            class="w-full border p-2 rounded-lg bg-white outline-none" required>
+                            <option value="">Seleccione un dueño...</option>
+                            <option th:each="cli : ${clientes}" th:value="${cli.id}"
+                                th:text="${cli.dni + ' - ' + cli.nombres + ' ' + cli.apellidos}">
+                            </option>
+                        </select>
+
+                        <button type="button" onclick="irACrearCliente()"
+                            class="bg-green-50 text-green-600 hover:bg-green-100 p-2 rounded-lg transition-colors tooltip"
+                            title="Registrar Cliente Nuevo">
+                            <span class="material-symbols-outlined text-[20px]">person_add</span>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -1309,8 +1318,15 @@
                         class="w-full border p-2 rounded-lg"></textarea>
                 </div>
 
-                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary">Guardar
-                    Mascota</button>
+                <div class="mt-4 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal('mascotaModal')"
+                        class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
+
+                    <button type="button" onclick="procesarGuardadoMascota()"
+                        class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary font-bold">
+                        Guardar Mascota
+                    </button>
+                </div>
             </form>
         </div>
     </div>

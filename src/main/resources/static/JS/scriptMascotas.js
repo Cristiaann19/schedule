@@ -1,15 +1,99 @@
+let modoExpress = false;
 const formMascota = document.getElementById('mascotaForm');
 
+
 function nuevaMascota() {
+    modoExpress = false;
     formMascota.reset();
     document.getElementById('mascotaId').value = '';
     document.getElementById('modalTitleMascota').innerText = "Nueva Mascota";
     openModal('mascotaModal');
 }
 
-function editarMascota(id) {
-    document.getElementById('modalTitleMascota').innerText = "Editar Mascota";
+function irACrearCliente() {
+    closeModal('mascotaModal');
+    if (typeof nuevoCliente === 'function') {
+        nuevoCliente();
+    } else {
+        console.error("Falta scriptClientes.js");
+    }
+}
 
+function irACrearMascota() {
+    modoExpress = true;
+    closeModal('citaModal');
+
+    formMascota.reset();
+    document.getElementById('mascotaId').value = '';
+    document.getElementById('modalTitleMascota').innerText = "Nueva Mascota (Rápida)";
+
+    openModal('mascotaModal');
+}
+
+
+function procesarGuardadoMascota() {
+    if (!formMascota.checkValidity()) {
+        formMascota.reportValidity();
+        return;
+    }
+
+    if (modoExpress) {
+        guardarMascotaAjax();
+    } else {
+        formMascota.submit();
+    }
+}
+
+function guardarMascotaAjax() {
+    const formData = new FormData(formMascota);
+
+    const btn = document.querySelector('#mascotaModal button[onclick*="procesar"]');
+    const textoOriginal = btn ? btn.innerText : "Guardar";
+    if (btn) {
+        btn.innerText = "Guardando...";
+        btn.disabled = true;
+    }
+
+    fetch('/admin/mascotas/api/guardar', {
+        method: 'POST',
+        body: formData
+    })
+        .then(res => {
+            if (!res.ok) throw new Error("Error en el servidor");
+            return res.json();
+        })
+        .then(mascota => {
+            const selectMascota = document.querySelector('#citaForm select[name="mascota"]');
+            if (selectMascota) {
+                let texto = mascota.nombre;
+                if (mascota.cliente) texto += ` (${mascota.cliente.nombres})`;
+                else texto += " (Nuevo)";
+
+                const nuevaOpcion = new Option(texto, mascota.id, true, true);
+                selectMascota.add(nuevaOpcion);
+            }
+
+            closeModal('mascotaModal');
+            openModal('citaModal');
+
+            if (typeof Toast !== 'undefined') Toast.success("Mascota registrada exitosamente");
+            modoExpress = false;
+        })
+        .catch(error => {
+            console.error(error);
+            if (typeof Toast !== 'undefined') Toast.error("Error al guardar la mascota");
+        })
+        .finally(() => {
+            if (btn) {
+                btn.innerText = textoOriginal;
+                btn.disabled = false;
+            }
+        });
+}
+
+function editarMascota(id) {
+    modoExpress = false;
+    document.getElementById('modalTitleMascota').innerText = "Editar Mascota";
     console.log("Cargando mascota ID:", id);
 
     fetch(`/admin/mascotas/api/${id}`)
@@ -18,10 +102,7 @@ function editarMascota(id) {
             return res.json();
         })
         .then(data => {
-            console.log("Datos recibidos:", data);
-
             document.getElementById('mascotaId').value = data.id;
-
             document.getElementById('mascotaNombre').value = data.nombre;
             document.getElementById('mascotaEspecie').value = data.especie;
             document.getElementById('mascotaRaza').value = data.raza;
@@ -42,18 +123,19 @@ function editarMascota(id) {
                     }
                 }
             }
-
             openModal('mascotaModal');
         })
         .catch(error => {
-            console.error("Error editando mascota:", error);
-            alert("No se pudieron cargar los datos.");
+            console.error("Error editando:", error);
+            if (typeof Toast !== 'undefined') Toast.error("No se pudieron cargar los datos");
+            else alert("Error cargando datos");
         });
 }
 
 function verHistorialMascota(id, nombre) {
     document.getElementById('historialNombreMascota').innerText = nombre;
     const container = document.getElementById('contenedorHistorial');
+
     container.innerHTML = '<div class="flex justify-center py-10"><span class="material-symbols-outlined animate-spin text-4xl text-primary">refresh</span></div>';
 
     openModal('historialMascotaModal');
@@ -61,7 +143,7 @@ function verHistorialMascota(id, nombre) {
     fetch(`/admin/historial/api/mascota/${id}`)
         .then(res => res.json())
         .then(data => {
-            container.innerHTML = ''; // Limpiar loader
+            container.innerHTML = '';
 
             if (data.length === 0) {
                 container.innerHTML = `
@@ -72,7 +154,6 @@ function verHistorialMascota(id, nombre) {
                 return;
             }
 
-            // Ordenar por fecha (más reciente primero)
             data.sort((a, b) => new Date(b.fechaRegistro) - new Date(a.fechaRegistro));
 
             let html = '<div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">';
@@ -80,7 +161,6 @@ function verHistorialMascota(id, nombre) {
             data.forEach(ficha => {
                 const fecha = new Date(ficha.fechaRegistro).toLocaleString();
 
-                // Determinar tipo de evento para el icono y color
                 let icon = 'stethoscope';
                 let colorClass = 'bg-red-100 text-red-600 border-red-200';
                 let titulo = 'Consulta General';
@@ -111,8 +191,7 @@ function verHistorialMascota(id, nombre) {
                             ${ficha.peso ? `<div class="flex items-center gap-1 text-xs font-semibold text-blue-600 mt-2"><span class="material-symbols-outlined text-[16px]">monitor_weight</span> Peso: ${ficha.peso} kg</div>` : ''}
                         </div>
                     </div>
-                </div>
-                `;
+                </div>`;
             });
 
             html += '</div>';
@@ -120,6 +199,6 @@ function verHistorialMascota(id, nombre) {
         })
         .catch(err => {
             console.error(err);
-            container.innerHTML = '<p class="text-center text-red-500">Error cargando el historial.</p>';
+            if (typeof Toast !== 'undefined') Toast.error("Error cargando historial");
         });
 }
