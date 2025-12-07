@@ -24,4 +24,6 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
             Cita.EstadoCita estadoCancelado);
 
     List<Cita> findByEstadoAndFechaHoraBefore(EstadoCita estado, LocalDateTime fechaActual);
+
+    List<Cita> findByMascotaIdAndFechaHoraAndEstadoNot(Long mascotaId, LocalDateTime fechaHora, Cita.EstadoCita estado);
 }

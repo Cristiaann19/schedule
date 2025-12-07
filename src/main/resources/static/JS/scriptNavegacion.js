@@ -28,7 +28,8 @@ function showSection(sectionId, linkElement) {
         'trabajadores': 'Gestión de Trabajadores',
         'vacunas': 'Gestión de Vacunas',
         'mascotas': 'Gestión de Mascotas',
-        'enfermedades': 'Gestión de Enfermedades'
+        'enfermedades': 'Gestión de Enfermedades',
+        'slider': 'Gestión de Slider'
     };
     document.getElementById('page-title').innerText = titles[sectionId] || 'Huellitas Panel';
 

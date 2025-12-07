@@ -3,6 +3,7 @@ package com.example.schedule.Controller;
 import com.example.schedule.Model.Mascota;
 import com.example.schedule.Service.MascotaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,17 @@ public class MascotaController {
             return "redirect:/admin/dashboard?success=Mascota+guardada+correctamente";
         } catch (Exception e) {
             return "redirect:/admin/dashboard?error=Error+al+guardar+mascota";
+        }
+    }
+
+    @PostMapping("/api/guardar")
+    @ResponseBody // Dice: "Devuelve datos (JSON), no una vista HTML"
+    public ResponseEntity<?> guardarMascotaAjax(Mascota mascota) {
+        try {
+            Mascota nueva = mascotaService.guardarMascota(mascota);
+            return ResponseEntity.ok(nueva);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al guardar: " + e.getMessage());
         }
     }
 

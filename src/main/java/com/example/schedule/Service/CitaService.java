@@ -31,6 +31,7 @@ public class CitaService {
 
     public void guardarCita(Cita cita) {
 
+        // 1. Completar datos del Servicio
         if (cita.getServicioId() != null) {
             Servicio servicio = servicioService.obtenerPorId(cita.getServicioId());
             if (servicio != null) {
@@ -47,6 +48,20 @@ public class CitaService {
         int hora = cita.getFechaHora().getHour();
         if (hora < 8 || hora >= 20) {
             throw new ValidacionException("El horario de atención es de 8:00 AM a 8:00 PM.");
+        }
+
+        if (cita.getMascota() != null) {
+            List<Cita> conflictosMascota = citaRepository.findByMascotaIdAndFechaHoraAndEstadoNot(
+                    cita.getMascota().getId(),
+                    cita.getFechaHora(),
+                    Cita.EstadoCita.CANCELADA);
+
+            for (Cita existente : conflictosMascota) {
+                if (!existente.getId().equals(cita.getId())) {
+                    throw new ValidacionException("La mascota " + existente.getMascota().getNombre() +
+                            " ya tiene una cita programada a las " + cita.getFechaHora().toLocalTime());
+                }
+            }
         }
 
         if (cita.getVeterinario() == null) {
@@ -130,7 +145,7 @@ public class CitaService {
 
         for (Cita cita : citasViejas) {
             cita.setEstado(EstadoCita.CANCELADA);
-
+            cita.setMotivo(cita.getMotivo() + " [Cerrada autom.]"); // Opcional: Agregar nota
             citaRepository.save(cita);
             System.out.println("Cita actualizada automáticamente ID: " + cita.getId());
         }

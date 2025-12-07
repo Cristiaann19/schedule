@@ -16,8 +16,8 @@ public class MascotaService {
         return mascotaRepository.findAll();
     }
 
-    public void guardarMascota(Mascota mascota) {
-        mascotaRepository.save(mascota);
+    public Mascota guardarMascota(Mascota mascota) {
+        return mascotaRepository.save(mascota);
     }
 
     public void eliminarMascota(Long id) {
