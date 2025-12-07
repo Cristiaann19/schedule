@@ -3,8 +3,10 @@ package com.example.schedule.Controller;
 import com.example.schedule.Model.Servicio;
 import com.example.schedule.Service.ServicioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/admin/servicios")
@@ -37,5 +39,16 @@ public class ServicioController {
     @ResponseBody
     public Servicio obtenerServicio(@PathVariable String id) {
         return servicioService.obtenerPorId(id);
+    }
+
+    @PostMapping("/cambiar-estado/{id}")
+    @ResponseBody
+    public ResponseEntity<?> cambiarEstado(@PathVariable String id) {
+        try {
+            servicioService.cambiarEstado(id);
+            return ResponseEntity.ok(Collections.singletonMap("success", true));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al cambiar estado: " + e.getMessage());
+        }
     }
 }

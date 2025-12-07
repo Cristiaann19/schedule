@@ -16,4 +16,5 @@ public class Servicio {
     private String colorInicio;
     private String colorFin;
     private Double precio;
+    private String estado;
 }

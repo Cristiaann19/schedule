@@ -529,6 +529,7 @@ public class DataLoader {
                 s.setColorInicio(cIni);
                 s.setColorFin(cFin);
                 s.setPrecio(precio);
+                s.setEstado("ACTIVO");
                 return s;
         }
 

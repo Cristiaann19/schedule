@@ -8,6 +8,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700"
@@ -33,7 +36,6 @@
             font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
         }
 
-        /* Clase para ocultar secciones */
         .hidden-section {
             display: none;
         }
@@ -101,10 +103,10 @@
                         <span class="material-symbols-outlined text-xl">shopping_cart</span>
                         <span>Ventas</span>
                     </a>
-                    <a href="#" onclick="showSection('slider', this)"
+                    <a href="#" onclick="showSection('pagos', this)"
                         class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
-                        <span class="material-symbols-outlined text-xl">slideshow</span>
-                        <span>Slider</span>
+                        <span class="material-symbols-outlined text-xl">payment</span>
+                        <span>Pagos</span>
                     </a>
                     <a href="#" onclick="showSection('clientes', this)"
                         class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
@@ -130,6 +132,11 @@
                         class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
                         <span class="material-symbols-outlined text-xl">vaccines</span>
                         <span>Vacunas</span>
+                    </a>
+                    <a href="#" onclick="showSection('slider', this)"
+                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">slideshow</span>
+                        <span>Slider</span>
                     </a>
                 </div>
 
@@ -416,6 +423,7 @@
                                     <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Icono</th>
                                     <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Nombre</th>
                                     <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Precio</th>
+                                    <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Estado</th>
                                     <th class="px-6 py-4 uppercase text-xs font-semibold text-gray-500">Acciones</th>
                                 </tr>
                             </thead>
@@ -435,6 +443,16 @@
                                     </td>
                                     <td class="px-6 py-4 font-bold text-gray-700" th:text="'S/ ' + ${serv.precio}">0.00
                                     </td>
+                                    <td class="px-6 py-4">
+                                        <span th:if="${serv.estado == 'ACTIVO'}"
+                                            class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">
+                                            Activo
+                                        </span>
+                                        <span th:unless="${serv.estado == 'ACTIVO'}"
+                                            class="px-2 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold">
+                                            Inactivo
+                                        </span>
+                                    </td>
                                     <td class="px-6 py-4 flex gap-2">
                                         <button th:data-id="${serv.id}"
                                             onclick="editarServicio(this.getAttribute('data-id'))"
@@ -446,6 +464,16 @@
                                             onclick="return confirm('¿Eliminar servicio?')">
                                             <span class="material-symbols-outlined">delete</span>
                                         </a>
+                                        <button th:data-id="${serv.id}"
+                                            onclick="cambiarEstadoServicio(this.getAttribute('data-id'))"
+                                            th:class="'p-1.5 rounded-lg transition-colors tooltip ' + 
+                     (${serv.estado == 'ACTIVO'} ? 'bg-orange-50 text-orange-600 hover:bg-orange-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100')"
+                                            th:title="${serv.estado == 'ACTIVO'} ? 'Desactivar' : 'Activar'">
+
+                                            <span class="material-symbols-outlined text-[20px]"
+                                                th:text="${serv.estado == 'ACTIVO'} ? 'unpublished' : 'check_circle'">
+                                            </span>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -502,6 +530,12 @@
                                             onclick="return confirm('¿Estás seguro de eliminar este producto?');">
                                             <span class="material-symbols-outlined">delete</span>
                                         </a>
+                                        <button th:data-id="${prod.id}" th:data-nombre="${prod.nombre}"
+                                            onclick="verHistorialProducto(this.getAttribute('data-id'), this.getAttribute('data-nombre'))"
+                                            class="text-cyan-600 hover:text-cyan-800 bg-cyan-50 p-1.5 rounded-lg transition-colors tooltip"
+                                            title="Ver Movimientos">
+                                            <span class="material-symbols-outlined text-[20px]">history</span>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -1574,6 +1608,52 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL DE HISTORIAL DE VENTAS -->
+    <div id="historialProductoModal"
+        class="fixed inset-0 bg-black/80 hidden items-center justify-center z-[80] backdrop-blur-sm">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl p-6 relative">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">Estado de Inventario</h3>
+                    <p class="text-sm text-gray-500">Producto: <span id="historialProdNombre"
+                            class="font-bold text-primary"></span></p>
+                </div>
+                <button onclick="closeModal('historialProductoModal')" class="text-gray-400 hover:text-red-500">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+
+            <div class="overflow-x-auto border rounded-lg">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-gray-100 text-gray-600 uppercase font-bold">
+                        <tr>
+                            <th class="px-4 py-3">Fecha de Venta</th>
+                            <th class="px-4 py-3">N° Documento</th>
+                            <th class="px-4 py-3 text-right">Precio Venta (S/)</th>
+                            <th class="px-4 py-3 text-center">Cantidad</th>
+                            <th class="px-4 py-3 text-right">Subtotal (S/)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaHistorialBody" class="divide-y divide-gray-100">
+                    </tbody>
+                    <tfoot class="bg-gray-50 font-bold text-gray-800 border-t-2 border-gray-200">
+                        <tr>
+                            <td colspan="3" class="px-4 py-3 text-right">TOTAL:</td>
+                            <td class="px-4 py-3 text-center" id="totalCantHistorial">0</td>
+                            <td class="px-4 py-3 text-right text-emerald-600" id="totalMontoHistorial">S/ 0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-2">
+                <button onclick="closeModal('historialProductoModal')"
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 font-medium">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- TOAST -->
     <script src="../JS/globalToast.js"></script>

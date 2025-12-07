@@ -30,4 +30,23 @@ public class ServicioService {
         }
         servicioRepository.save(servicio);
     }
+
+    public void cambiarEstado(String id) {
+        // Buscamos el servicio (Mongo ID es String)
+        Servicio s = servicioRepository.findById(id).orElse(null);
+
+        if (s != null) {
+            // Invertimos el estado
+            if ("ACTIVO".equals(s.getEstado())) {
+                s.setEstado("INACTIVO");
+            } else {
+                s.setEstado("ACTIVO");
+            }
+            servicioRepository.save(s);
+        }
+    }
+
+    public List<Servicio> listarSoloActivos() {
+        return servicioRepository.findByEstado("ACTIVO");
+    }
 }

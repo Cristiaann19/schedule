@@ -59,7 +59,7 @@ public class PublicController {
         request.getSession(true);
 
         model.addAttribute("productos", productoService.listarProductos());
-        model.addAttribute("servicios", servicioService.listarServicios());
+        model.addAttribute("servicios", servicioService.listarSoloActivos());
 
         model.addAttribute("testimonios", testimonioService.listarTestimonios());
 

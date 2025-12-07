@@ -24,3 +24,29 @@ function editarServicio(id) {
             openModal('servicioModal');
         });
 }
+
+function cambiarEstadoServicio(id) {
+
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    fetch(`/admin/servicios/cambiar-estado/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        }
+    })
+        .then(res => {
+            if (res.ok) {
+                if (typeof Toast !== 'undefined') Toast.success("Estado actualizado");
+                setTimeout(() => window.location.reload(), 500);
+            } else {
+                if (typeof Toast !== 'undefined') Toast.error("No se pudo cambiar el estado");
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            if (typeof Toast !== 'undefined') Toast.error("Error de conexión");
+        });
+}
