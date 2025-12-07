@@ -7,4 +7,5 @@ import com.example.schedule.Model.VacunaCatalogo;
 
 @Repository
 public interface VacunaCatalogoRepository extends MongoRepository<VacunaCatalogo, String> {
+    VacunaCatalogo findByNombre(String nombre);
 }

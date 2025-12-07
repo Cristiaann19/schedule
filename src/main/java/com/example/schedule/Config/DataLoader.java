@@ -324,7 +324,29 @@ public class DataLoader {
                                 crearVenta(ventaRepository, c.get(12), "YAPE", "778899", "COMPLETADA",
                                                 Arrays.asList(p.get(10), p.get(6)), Arrays.asList(1, 1));
 
-                                System.out.println("✅ Ventas cargadas.");
+                                // --- NUEVAS VENTAS ADICIONALES ---
+
+                                // Venta 6: Patricia compra un Rascador Torre
+                                crearVenta(ventaRepository, c.get(15), "TARJETA", "STRIPE-001", "COMPLETADA",
+                                                Arrays.asList(p.get(13)), Arrays.asList(1));
+
+                                // Venta 7: Fernando compra Cama Ortopédica y Suplementos
+                                crearVenta(ventaRepository, c.get(14), "TRANSFERENCIA", "BBVA-123", "COMPLETADA",
+                                                Arrays.asList(p.get(14), p.get(3)), Arrays.asList(1, 2));
+
+                                // Venta 8: Admin compra varios items para reponer stock interno (Simulado)
+                                crearVenta(ventaRepository, c.get(0), "EFECTIVO", "Caja-002", "COMPLETADA",
+                                                Arrays.asList(p.get(0), p.get(5), p.get(15)), Arrays.asList(5, 10, 5));
+
+                                // Venta 9: Sofia compra Collar Reflectivo (Pendiente)
+                                crearVenta(ventaRepository, c.get(10), "YAPE", "456123", "POR_VALIDAR",
+                                                Arrays.asList(p.get(6)), Arrays.asList(1));
+
+                                // Venta 10: Miguel compra Alimento Premium
+                                crearVenta(ventaRepository, c.get(9), "PLIN", "321654", "COMPLETADA",
+                                                Arrays.asList(p.get(1)), Arrays.asList(2));
+
+                                System.out.println("✅ Ventas cargadas (10 registros).");
                         }
 
                         // --- 8. CARGAR TESTIMONIOS (Mongo)---
@@ -389,25 +411,27 @@ public class DataLoader {
                                 List<VacunaCatalogo> vacunas = Arrays.asList(
                                                 // PERROS
                                                 crearVacunaCat("Nobivac Puppy DP", "MSD Animal Health",
-                                                                "Parvovirus y Distemper", 1, 1),
+                                                                "Parvovirus y Distemper", 1, 1, 45.00),
                                                 crearVacunaCat("Vanguard Plus 5 (Quíntuple)", "Zoetis",
                                                                 "Distemper, Adenovirus, Parvovirus, Parainfluenza", 2,
-                                                                1),
+                                                                1, 55.00),
                                                 crearVacunaCat("Recombitek C6 (Séptuple)", "Boehringer Ingelheim",
-                                                                "Quíntuple + Lepto", 3, 1),
+                                                                "Quíntuple + Lepto", 3, 1, 65.00),
                                                 crearVacunaCat("Bronchi-Shield (KC)", "Zoetis",
-                                                                "Tos de las Perreras (Bordetella)", 3, 1),
-                                                crearVacunaCat("GiardiaVax", "Zoetis", "Giardia Lamblia", 4, 2),
+                                                                "Tos de las Perreras (Bordetella)", 3, 1, 40.00),
+                                                crearVacunaCat("GiardiaVax", "Zoetis", "Giardia Lamblia", 4, 2, 50.00),
 
                                                 // GATOS
                                                 crearVacunaCat("Felocell 3 (Triple Felina)", "Zoetis",
-                                                                "Rinotraqueitis, Calicivirus, Panleucopenia", 2, 1),
-                                                crearVacunaCat("Leucogen", "Virbac", "Leucemia Felina", 3, 1),
+                                                                "Rinotraqueitis, Calicivirus, Panleucopenia", 2, 1,
+                                                                45.00),
+                                                crearVacunaCat("Leucogen", "Virbac", "Leucemia Felina", 3, 1, 60.00),
                                                 crearVacunaCat("Nobivac Tricat Trio", "MSD",
-                                                                "Calicivirus, Herpesvirus, Panleucopenia", 2, 1),
+                                                                "Calicivirus, Herpesvirus, Panleucopenia", 2, 1, 50.00),
 
                                                 // AMBOS
-                                                crearVacunaCat("Rabisin", "Boehringer Ingelheim", "Rabia", 4, 1));
+                                                crearVacunaCat("Rabisin", "Boehringer Ingelheim", "Rabia", 4, 1,
+                                                                35.00));
                                 vacunaCatalogoRepository.saveAll(vacunas);
                                 System.out.println("✅ Catálogo de Vacunas cargado en MongoDB.");
                         }
@@ -426,13 +450,14 @@ public class DataLoader {
                 return e;
         }
 
-        private VacunaCatalogo crearVacunaCat(String nom, String fab, String enf, int edad, int dosis) {
+        private VacunaCatalogo crearVacunaCat(String nom, String fab, String enf, int edad, int dosis, double precio) {
                 VacunaCatalogo v = new VacunaCatalogo();
                 v.setNombre(nom);
                 v.setFabricante(fab);
                 v.setEnfermedadAsociada(enf);
                 v.setEdadRecomendada(edad);
                 v.setDosis(dosis);
+                v.setPrecio(precio);
                 return v;
         }
 
@@ -455,6 +480,11 @@ public class DataLoader {
                 v.setEstado(estado);
 
                 double total = 0;
+                // Inicializar la lista de detalles si es null
+                if (v.getDetalles() == null) {
+                        v.setDetalles(new ArrayList<>());
+                }
+
                 for (int i = 0; i < prods.size(); i++) {
                         DetalleVenta d = new DetalleVenta();
                         d.setProductoId(prods.get(i).getId());

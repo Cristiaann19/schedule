@@ -1,5 +1,12 @@
 const formCita = document.getElementById('citaForm');
 
+function abrirConsulta(citaId, mascotaId, nombreMascota) {
+    document.getElementById('consultaCitaId').value = citaId;
+    document.getElementById('consultaMascotaId').value = mascotaId;
+    document.getElementById('consultaPaciente').innerText = nombreMascota;
+    openModal('consultaModal');
+}
+
 function nuevaCita() {
     formCita.reset();
     document.getElementById('citaId').value = '';
@@ -26,6 +33,7 @@ function editarCita(id) {
         .then(data => {
             console.log("--> Datos cita:", data);
 
+
             const inputId = document.getElementById('citaId');
             if (inputId) inputId.value = data.id;
 
@@ -44,7 +52,9 @@ function editarCita(id) {
 
             const inputFecha = document.querySelector('#citaForm input[name="fechaHora"]');
             if (data.fechaHora && inputFecha) {
-                inputFecha.value = data.fechaHora;
+
+                let fechaFormateada = data.fechaHora.substring(0, 16);
+                inputFecha.value = fechaFormateada;
             }
 
             if (data.estado) {
@@ -63,6 +73,29 @@ function editarCita(id) {
                 Toast.error("No se pudo cargar la información de la cita.");
             } else {
                 alert("Error al cargar la cita.");
+            }
+        });
+}
+
+function cobrarCita(id) {
+    if (!confirm("¿Deseas cobrar esta cita y generar la venta?")) return;
+
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    fetch(`/admin/citas/cobrar/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        }
+    })
+        .then(res => {
+            if (res.ok) {
+                Toast.success("Cita cobrada y venta registrada");
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                Toast.error("Error al cobrar");
             }
         });
 }

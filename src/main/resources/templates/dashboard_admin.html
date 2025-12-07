@@ -60,14 +60,20 @@
         <aside
             class="w-64 bg-gradient-to-b from-gray-800 to-gray-900 text-white flex flex-col transition-all duration-300 flex-shrink-0">
             <div class="p-6 border-b border-gray-700">
-                <div class="flex items-center gap-3">
-                    <div>
-                        <span class="material-symbols-outlined text-white text-3xl">pets</span>
+                <div class="flex flex-col items-center gap-2">
+
+                    <div class="w-full flex justify-center">
+                        <img th:src="@{/images/logo-huellitas.png}" alt="Logo Huellitas"
+                            class="w-32 h-auto object-contain">
                     </div>
-                    <div>
-                        <h1 class="text-xl font-bold">Huellitas</h1>
-                        <p class="text-xs text-gray-400">Panel Administrativo</p>
+
+                    <div class="text-center">
+                        <p
+                            class="text-xs text-gray-400 font-medium tracking-widest uppercase border-t border-gray-600 pt-2 mt-1">
+                            Panel Administrativo
+                        </p>
                     </div>
+
                 </div>
             </div>
 
@@ -102,11 +108,6 @@
                         class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
                         <span class="material-symbols-outlined text-xl">shopping_cart</span>
                         <span>Ventas</span>
-                    </a>
-                    <a href="#" onclick="showSection('pagos', this)"
-                        class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
-                        <span class="material-symbols-outlined text-xl">payment</span>
-                        <span>Pagos</span>
                     </a>
                     <a href="#" onclick="showSection('clientes', this)"
                         class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
@@ -399,8 +400,16 @@
                                                 title="Atender Paciente">
                                                 <span class="material-symbols-outlined">stethoscope</span>
                                             </button>
+                                            <button
+                                                th:if="${cita.estado.name() != 'REALIZADA' && cita.estado.name() != 'CANCELADA'}"
+                                                th:onclick="'cobrarCita(' + ${cita.id} + ')'"
+                                                class="bg-green-50 text-green-600 hover:bg-green-100 p-1.5 rounded tooltip"
+                                                title="Cobrar y Finalizar">
+                                                <span class="material-symbols-outlined">payments</span>
+                                            </button>
                                         </div>
                                     </td>
+
                                 </tr>
                             </tbody>
                         </table>
@@ -1663,7 +1672,6 @@
     <script src="../JS/scriptServices.js"></script>
     <script src="../JS/scriptEmployee.js"></script>
     <script src="../JS/scriptCitas.js"></script>
-    <script src="../JS/scriptCitas2.js"></script>
     <script src="../JS/scriptMascotas.js"></script>
     <script src="../JS/scriptVenta.js"></script>
     <script src="../JS/scriptGraficos.js"></script>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -20,9 +21,20 @@ public class HistorialController {
     private HistorialService historialService;
 
     @PostMapping("/guardar")
-    public String guardarConsulta(HistorialClinico historia) {
-        historialService.registrarConsulta(historia);
-        return "redirect:/admin/dashboard";
+    public String guardarHistorial(HistorialClinico historial, @RequestParam Long citaId) {
+        try {
+            // Aseguramos que el objeto Historial tenga el ID de la cita (VITAL PARA EL
+            // COBRO)
+            historial.setCitaId(citaId);
+
+            // Llamamos al servicio (que ya tiene la lógica de guardar en Mongo)
+            historialService.guardarHistorial(historial, citaId);
+
+            return "redirect:/admin/dashboard?success=Consulta+registrada+correctamente";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/admin/dashboard?error=Error+al+guardar+historial";
+        }
     }
 
     @GetMapping("/api/mascota/{id}")

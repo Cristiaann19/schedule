@@ -15,4 +15,5 @@ public class VacunaCatalogo {
     private String enfermedadAsociada;
     private Integer edadRecomendada;
     private Integer dosis;
+    private Double precio;
 }

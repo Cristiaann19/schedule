@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface HistorialRepository extends MongoRepository<HistorialClinico, String> {
     List<HistorialClinico> findByMascotaId(Long mascotaId);
+
+    List<HistorialClinico> findByCitaId(Long citaId);
 }

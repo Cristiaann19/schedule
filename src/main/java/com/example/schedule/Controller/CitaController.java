@@ -5,8 +5,10 @@ import com.example.schedule.Model.Cita;
 import com.example.schedule.Service.CitaService;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -40,5 +42,16 @@ public class CitaController {
     @ResponseBody
     public Cita obtenerCita(@PathVariable Long id) {
         return citaService.buscarPorId(id);
+    }
+
+    @PostMapping("/cobrar/{id}")
+    @ResponseBody
+    public ResponseEntity<?> cobrarCita(@PathVariable Long id) {
+        try {
+            citaService.cobrarYFinalizarCita(id);
+            return ResponseEntity.ok().body(Collections.singletonMap("success", true));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

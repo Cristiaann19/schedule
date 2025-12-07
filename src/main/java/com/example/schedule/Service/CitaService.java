@@ -3,16 +3,27 @@ package com.example.schedule.Service;
 import com.example.schedule.Exception.ValidacionException;
 import com.example.schedule.Model.Cita;
 import com.example.schedule.Model.Cita.EstadoCita;
+import com.example.schedule.Model.DetalleVenta;
+import com.example.schedule.Model.HistorialClinico;
 import com.example.schedule.Model.Servicio;
 import com.example.schedule.Model.Trabajador;
+import com.example.schedule.Model.VacunaCatalogo;
+import com.example.schedule.Model.Venta;
 import com.example.schedule.Repository.JPA.CitaRepository;
 import com.example.schedule.Repository.JPA.TrabajadorRepository;
+import com.example.schedule.Repository.JPA.VentaRepository;
+import com.example.schedule.Repository.Mongo.HistorialRepository;
+import com.example.schedule.Repository.Mongo.VacunaCatalogoRepository;
+
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CitaService {
@@ -24,6 +35,15 @@ public class CitaService {
 
     @Autowired
     private TrabajadorRepository trabajadorRepository;
+
+    @Autowired
+    private VentaRepository ventaRepository;
+
+    @Autowired
+    private VacunaCatalogoRepository vacunaCatalogoRepository;
+
+    @Autowired
+    private HistorialRepository HistorialRepository;
 
     public List<Cita> listarCitas() {
         return citaRepository.findAll();
@@ -149,5 +169,82 @@ public class CitaService {
             citaRepository.save(cita);
             System.out.println("Cita actualizada automáticamente ID: " + cita.getId());
         }
+    }
+
+    @Transactional
+    public void cobrarYFinalizarCita(Long citaId) {
+        System.out.println("--- COBRANDO CITA ID: " + citaId + " ---");
+
+        Cita cita = citaRepository.findById(citaId)
+                .orElseThrow(() -> new RuntimeException("Cita no encontrada"));
+
+        if (cita.getEstado() == Cita.EstadoCita.REALIZADA) {
+            throw new RuntimeException("Cita ya cobrada.");
+        }
+
+        Venta venta = new Venta();
+        if (cita.getMascota() != null)
+            venta.setCliente(cita.getMascota().getCliente());
+        venta.setFecha(LocalDateTime.now());
+        venta.setMetodoPago("EFECTIVO");
+        venta.setCodigoOperacion("CITA-" + cita.getId());
+        venta.setEstado("COMPLETADA");
+
+        List<DetalleVenta> detalles = new ArrayList<>();
+        double totalVenta = 0.0;
+
+        // 1. SERVICIO BASE
+        Double precioServicio = (cita.getPrecioAcordado() != null) ? cita.getPrecioAcordado() : 0.0;
+        DetalleVenta detServ = new DetalleVenta();
+        detServ.setNombreProducto("Servicio: " + cita.getServicioNombre());
+        detServ.setPrecioUnitario(precioServicio);
+        detServ.setCantidad(1);
+        detServ.setSubtotal(precioServicio);
+        detServ.setVenta(venta);
+        if (cita.getServicioId() != null)
+            detServ.setProductoId(String.valueOf(cita.getServicioId()));
+
+        detalles.add(detServ);
+        totalVenta += precioServicio;
+
+        // 2. EXTRAS DEL HISTORIAL (Ahora soporta múltiples registros)
+        // Obtenemos la LISTA de fichas (pueden ser 1, 2 o más)
+        List<HistorialClinico> fichas = HistorialRepository.findByCitaId(citaId);
+
+        System.out.println("Fichas encontradas: " + fichas.size());
+
+        for (HistorialClinico ficha : fichas) {
+            String vacuna = ficha.getVacunaAplicada();
+
+            // Validar si tiene vacuna
+            if (vacuna != null && !vacuna.trim().isEmpty() &&
+                    !vacuna.contains("Ninguna") && !vacuna.equals("null")) {
+
+                VacunaCatalogo catalogo = vacunaCatalogoRepository.findByNombre(vacuna);
+
+                double precioVacuna = (catalogo != null && catalogo.getPrecio() != null) ? catalogo.getPrecio() : 35.00;
+
+                DetalleVenta detVac = new DetalleVenta();
+                detVac.setNombreProducto("Vacuna: " + vacuna);
+                detVac.setPrecioUnitario(precioVacuna);
+                detVac.setCantidad(1);
+                detVac.setSubtotal(precioVacuna);
+                detVac.setVenta(venta);
+
+                detalles.add(detVac);
+                totalVenta += precioVacuna;
+
+                System.out.println("Sumando vacuna: " + vacuna + " - S/ " + precioVacuna);
+            }
+        }
+
+        // 3. FINALIZAR
+        venta.setDetalles(detalles);
+        venta.setTotal(totalVenta);
+
+        ventaRepository.save(venta);
+
+        cita.setEstado(Cita.EstadoCita.REALIZADA);
+        citaRepository.save(cita);
     }
 }
