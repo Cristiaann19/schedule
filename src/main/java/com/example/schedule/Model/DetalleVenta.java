@@ -2,6 +2,7 @@ package com.example.schedule.Model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
@@ -21,5 +22,6 @@ public class DetalleVenta {
     @ManyToOne
     @JoinColumn(name = "venta_id")
     @JsonIgnore
+    @ToString.Exclude
     private Venta venta;
 }

@@ -2,8 +2,9 @@ package com.example.schedule.Model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import java.util.List;
-
+import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
@@ -30,5 +31,6 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Mascota> mascotas;
+    @ToString.Exclude
+    private List<Mascota> mascotas = new ArrayList<>();
 }

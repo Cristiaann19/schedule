@@ -8,72 +8,50 @@ function abrirConsulta(citaId, mascotaId, nombreMascota) {
 }
 
 function nuevaCita() {
-    formCita.reset();
+    document.getElementById('citaForm').reset();
     document.getElementById('citaId').value = '';
     document.getElementById('modalTitleCita').innerText = "Agendar Cita";
-    const selectEstado = document.querySelector('#citaForm select[name="estado"]');
-    if (selectEstado) selectEstado.value = 'PENDIENTE';
+
+    document.getElementById('citaTrabajador').innerHTML = '<option value="">Seleccione servicio primero...</option>';
 
     openModal('citaModal');
 }
 
 function editarCita(id) {
-    const titulo = document.getElementById('modalTitleCita');
-    if (titulo) titulo.innerText = "Editar Cita";
-
-    if (typeof Toast !== 'undefined') {
-        Toast.info("Cargando datos...", "Espere");
-    }
+    document.getElementById('modalTitleCita').innerText = "Editar Cita";
 
     fetch(`/admin/citas/api/${id}`)
-        .then(res => {
-            if (!res.ok) throw new Error("Error en la respuesta del servidor");
-            return res.json();
-        })
+        .then(res => res.json())
         .then(data => {
-            console.log("--> Datos cita:", data);
+            // ... (tus otros campos: id, fecha, motivo, mascota) ...
+            document.getElementById('citaId').value = data.id;
 
+            // Fecha (recuerda el formato)
+            if (data.fechaHora) document.querySelector('input[name="fechaHora"]').value = data.fechaHora.substring(0, 16);
 
-            const inputId = document.getElementById('citaId');
-            if (inputId) inputId.value = data.id;
+            // Mascota
+            if (data.mascota) document.querySelector('select[name="mascota"]').value = data.mascota.id;
 
-            if (data.mascota) {
-                const selectMascota = document.querySelector('#citaForm select[name="mascota"]');
-                if (selectMascota) selectMascota.value = data.mascota.id;
-            }
+            // Estado
+            if (data.estado) document.querySelector('select[name="estado"]').value = data.estado;
 
-            if (data.veterinario) {
-                const selectVet = document.querySelector('#citaForm select[name="veterinario"]');
-                if (selectVet) selectVet.value = data.veterinario.id;
-            }
+            document.querySelector('textarea[name="motivo"]').value = data.motivo;
 
-            const selectServicio = document.querySelector('#citaForm select[name="servicioId"]');
-            if (selectServicio) selectServicio.value = data.servicioId;
+            // --- AQUÍ ESTÁ LA MAGIA ---
+            // 1. Seleccionar el Servicio
+            const selectServicio = document.getElementById('citaServicio');
 
-            const inputFecha = document.querySelector('#citaForm input[name="fechaHora"]');
-            if (data.fechaHora && inputFecha) {
+            // Nota: data.servicioId podría venir como número o string, en Mongo a veces es string
+            if (data.servicioId) selectServicio.value = data.servicioId;
 
-                let fechaFormateada = data.fechaHora.substring(0, 16);
-                inputFecha.value = fechaFormateada;
-            }
+            // 2. Obtener el ID del trabajador actual (si existe)
+            const trabajadorId = data.veterinario ? data.veterinario.id : null;
 
-            if (data.estado) {
-                const selectEstado = document.querySelector('#citaForm select[name="estado"]');
-                if (selectEstado) selectEstado.value = data.estado;
-            }
-
-            const txtMotivo = document.querySelector('#citaForm textarea[name="motivo"]');
-            if (txtMotivo) txtMotivo.value = data.motivo;
+            // 3. Ejecutar el filtro MANUALMENTE pasando el nombre del servicio
+            // (El nombre viene en data.servicioNombre)
+            filtrarTrabajadoresPorServicio(data.servicioNombre, trabajadorId);
 
             openModal('citaModal');
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            if (typeof Toast !== 'undefined') {
-                Toast.error("No se pudo cargar la información de la cita.");
-            } else {
-                alert("Error al cargar la cita.");
-            }
         });
 }
 
@@ -98,4 +76,53 @@ function cobrarCita(id) {
                 Toast.error("Error al cobrar");
             }
         });
+}
+
+// Función para filtrar trabajadores dinámicamente
+function filtrarTrabajadoresPorServicio(servicioNombre = "", trabajadorSeleccionadoId = null) {
+    const selectServicio = document.getElementById('citaServicio');
+    const selectTrabajador = document.getElementById('citaTrabajador');
+
+    // Si no pasamos nombre, lo intentamos sacar del select
+    if (!servicioNombre && selectServicio.selectedIndex > 0) {
+        servicioNombre = selectServicio.options[selectServicio.selectedIndex].getAttribute('data-nombre');
+    }
+
+    // Limpiar opciones actuales
+    selectTrabajador.innerHTML = '<option value="">Cualquiera (Automático)</option>';
+
+    if (!servicioNombre) return; // Si no hay servicio, no mostramos nada
+
+    // 1. Determinar especialidad requerida
+    let especialidadRequerida = "Veterinario"; // Por defecto
+
+    // Si el nombre contiene "Baño", "Corte" o "Grooming", necesitamos un Estilista
+    const nombreLower = servicioNombre.toLowerCase();
+    if (nombreLower.includes('baño') || nombreLower.includes('corte') || nombreLower.includes('grooming')) {
+        especialidadRequerida = "Estilista";
+    }
+
+    // 2. Filtrar la lista global (que viene del HTML)
+    // Filtramos por especialidad Y que estén ACTIVOS
+    const candidatos = listaTrabajadores.filter(t =>
+        t.especialidad === especialidadRequerida && t.estadoLaboral === 'ACTIVO'
+    );
+
+    // 3. Llenar el select
+    candidatos.forEach(trab => {
+        const option = document.createElement('option');
+        option.value = trab.id;
+        option.text = trab.nombres + " " + trab.apellidos;
+        selectTrabajador.appendChild(option);
+    });
+
+    // 4. Si estamos editando, seleccionar al trabajador original
+    if (trabajadorSeleccionadoId) {
+        selectTrabajador.value = trabajadorSeleccionadoId;
+    }
+}
+
+// Actualizar también la función "filtrarPersonalPorServicio" para el onchange del HTML
+function filtrarPersonalPorServicio() {
+    filtrarTrabajadoresPorServicio();
 }

@@ -63,8 +63,8 @@
                 <div class="flex flex-col items-center gap-2">
 
                     <div class="w-full flex justify-center">
-                        <img th:src="@{/images/logo-huellitas.png}" alt="Logo Huellitas"
-                            class="w-32 h-auto object-contain">
+                        <img th:src="${configWeb.urlLogo != null ? configWeb.urlLogo : '/images/logo-huellitas.png'}"
+                            alt="Logo Huellitas" class="w-32 h-auto object-contain">
                     </div>
 
                     <div class="text-center">
@@ -959,6 +959,69 @@
                     </div>
                 </div>
 
+                <div id="section-slider" class="content-section hidden-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold">Gestión de Página Web</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                            <h4 class="font-bold mb-4">Logo del Sitio</h4>
+                            <div class="flex flex-col items-center">
+
+                                <img id="previewLogoAdmin"
+                                    th:src="${configWeb != null && configWeb.urlLogo != null ? configWeb.urlLogo : '/images/logo-placeholder.png'}"
+                                    class="h-24 object-contain mb-4 border p-2 rounded bg-gray-50">
+
+                                <form th:action="@{/admin/web/logo/subir}" method="post" enctype="multipart/form-data"
+                                    class="w-full">
+                                    <input type="file" name="file" accept="image/*" class="mb-2 w-full text-sm"
+                                        required>
+                                    <button type="submit"
+                                        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+                                        Actualizar Logo
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                            <h4 class="font-bold mb-4">Imágenes del Slider</h4>
+
+                            <form th:action="@{/admin/web/slider/agregar}" method="post" enctype="multipart/form-data"
+                                class="mb-6 flex gap-2">
+                                <input type="file" name="file" accept="image/*"
+                                    class="flex-1 text-sm border rounded p-1" required>
+                                <button type="submit"
+                                    class="bg-green-600 text-white px-4 rounded hover:bg-green-700 transition">Agregar</button>
+                            </form>
+
+                            <div class="grid grid-cols-3 gap-2" id="gridSliderAdmin">
+
+                                <div th:each="img : ${configWeb.imagenesSlider}" class="relative group h-20">
+
+                                    <img th:src="${img}"
+                                        class="h-full w-full object-cover rounded border border-gray-200">
+
+                                    <a th:href="@{/admin/web/slider/eliminar(url=${img})}"
+                                        onclick="return confirm('¿Eliminar esta imagen del carrusel?')"
+                                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition hover:bg-red-600 cursor-pointer shadow-sm">
+                                        <span class="material-symbols-outlined text-[14px] font-bold block">close</span>
+                                    </a>
+                                </div>
+
+                                <div th:if="${#lists.isEmpty(configWeb.imagenesSlider)}"
+                                    class="col-span-3 text-center text-gray-400 text-sm py-4 border-2 border-dashed rounded">
+                                    No hay imágenes en el slider
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             </main>
         </div>
     </div>
@@ -1243,16 +1306,13 @@
                         </select>
                     </div>
 
+
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Veterinario</label>
-                        <select name="veterinario"
+                        <label class="block text-sm font-medium text-gray-700">Encargado</label>
+                        <select id="citaTrabajador" name="veterinario"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none">
                             <option value="">Cualquiera (Automático)</option>
-                            <option th:each="doc : ${trabajadores}"
-                                th:if="${doc.especialidad == 'Veterinario' and doc.estadoLaboral != null and doc.estadoLaboral.toString() == 'ACTIVO'}"
-                                th:value="${doc.id}" th:text="${doc.nombres}">
-                                Dr. Juan
-                            </option>
                         </select>
                     </div>
                 </div>
@@ -1260,12 +1320,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Servicio</label>
-                        <select name="servicioId"
+                        <select id="citaServicio" name="servicioId" onchange="filtrarPersonalPorServicio()"
                             class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white outline-none" required>
                             <option value="">Seleccione...</option>
-                            <option th:each="serv : ${servicios}" th:value="${serv.id}"
-                                th:text="${serv.nombre + ' - S/' + serv.precio}">
-                                Consulta
+                            <option th:each="serv : ${servicios}" th:value="${serv.id}" th:data-nombre="${serv.nombre}"
+                                th:data-precio="${serv.precio}" th:text="${serv.nombre + ' - S/' + serv.precio}">
                             </option>
                         </select>
                     </div>
@@ -1663,6 +1722,10 @@
         </div>
     </div>
 
+
+    <script th:inline="javascript">
+        const listaTrabajadores = /*[[${trabajadores}]]*/[];
+    </script>
 
     <!-- TOAST -->
     <script src="../JS/globalToast.js"></script>

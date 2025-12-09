@@ -25,6 +25,7 @@ import com.example.schedule.Exception.ValidacionException;
 import com.example.schedule.Model.Cita;
 import com.example.schedule.Model.Cliente;
 import com.example.schedule.Model.Mascota;
+import com.example.schedule.Repository.JPA.TrabajadorRepository;
 import com.example.schedule.Service.CitaService;
 import com.example.schedule.Service.ClienteService;
 import com.example.schedule.Service.MascotaService;
@@ -32,6 +33,7 @@ import com.example.schedule.Service.ProductoService;
 import com.example.schedule.Service.ServicioService;
 import com.example.schedule.Service.TestimonioService;
 import com.example.schedule.Service.VentaService;
+import com.example.schedule.Service.ConfiguracionService;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -52,6 +54,11 @@ public class PublicController {
     private VentaService ventaService;
     @Autowired
     private TestimonioService testimonioService;
+    @Autowired
+    private TrabajadorRepository trabajadorRepository;
+
+    @Autowired
+    private ConfiguracionService configService;
 
     @GetMapping({ "/", "/index" })
     public String index(Model model, Principal principal, HttpServletRequest request) {
@@ -78,7 +85,8 @@ public class PublicController {
         } else {
             System.out.println("INDEX: Usuario es NULL (Visitante)");
         }
-
+        model.addAttribute("trabajadores", trabajadorRepository.findAll());
+        model.addAttribute("configWeb", configService.obtenerConfiguracion());
         return "index_publico";
     }
 

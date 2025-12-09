@@ -36,6 +36,8 @@ public class AdminController {
     private VacunaService vacunaService;
     @Autowired
     private VentaService ventaService;
+    @Autowired
+    private ConfiguracionService configService;
 
     @Autowired
     private CitaRepository citaRepository;
@@ -88,6 +90,7 @@ public class AdminController {
         model.addAttribute("ventas", ventaService.listarTodas());
         model.addAttribute("vacunas", vacunaService.listarCatalogo());
         model.addAttribute("listaCitasHoy", citaService.obtenerCitasDelDia());
+        model.addAttribute("configWeb", configService.obtenerConfiguracion());
 
         return "dashboard_admin";
     }

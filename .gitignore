@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignorar carpetas de subida de archivos
+/uploads/
+/media/
+**/*.log

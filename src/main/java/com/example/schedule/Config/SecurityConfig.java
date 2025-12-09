@@ -37,6 +37,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/veterinario/**").hasAnyRole("VETERINARIO", "ADMIN")
                                                 .requestMatchers("/asistente/**").hasAnyRole("ASISTENTE", "ADMIN")
                                                 .requestMatchers("/api/pagos/**").authenticated()
+                                                .requestMatchers("/media/**").permitAll()
                                                 .anyRequest().authenticated())
                                 .formLogin((form) -> form
                                                 .loginPage("/login")
