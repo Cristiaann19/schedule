@@ -1,20 +1,17 @@
 function abrirGaleria(tipoDestino) {
-    // 1. Guardamos qué queremos cambiar (LOGO o SLIDER)
     document.getElementById('accionGaleriaDestino').value = tipoDestino;
 
-    // 2. Mostramos el modal
     const modal = document.getElementById('galeriaModal');
     modal.classList.remove('hidden');
     modal.classList.add('flex');
 
-    // 3. Pedimos las fotos al servidor (Java)
     const contenedor = document.getElementById('contenedorGaleria');
     contenedor.innerHTML = '<p class="text-center col-span-full text-gray-500">Cargando...</p>';
 
     fetch('/admin/web/api/imagenes')
         .then(response => response.json())
         .then(urls => {
-            contenedor.innerHTML = ''; // Limpiar
+            contenedor.innerHTML = '';
 
             if (urls.length === 0) {
                 contenedor.innerHTML = '<p class="text-center col-span-full text-gray-400">No hay imágenes subidas aún.</p>';
@@ -22,7 +19,6 @@ function abrirGaleria(tipoDestino) {
             }
 
             urls.forEach(url => {
-                // Crear tarjeta de imagen
                 const div = document.createElement('div');
                 div.className = "relative group cursor-pointer border-2 border-gray-200 hover:border-blue-500 rounded-xl overflow-hidden bg-gray-50 shadow-sm transition-all w-full h-40";
                 div.onclick = () => seleccionarImagenDeGaleria(url);

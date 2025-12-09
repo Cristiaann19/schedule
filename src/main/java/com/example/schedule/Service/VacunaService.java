@@ -18,6 +18,10 @@ public class VacunaService {
     }
 
     public void guardarCatalogo(VacunaCatalogo v) {
+
+        if (v.getId() != null && v.getId().isEmpty()) {
+            v.setId(null);
+        }
         catalogoRepo.save(v);
     }
 
@@ -26,7 +30,7 @@ public class VacunaService {
     }
 
     public VacunaCatalogo buscarCatalogoPorId(String id) {
+
         return catalogoRepo.findById(id).orElse(null);
     }
-
 }

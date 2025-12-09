@@ -2,6 +2,7 @@ package com.example.schedule.Controller;
 
 import com.example.schedule.Service.VacunaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,13 @@ public class VacunaCatalogoController {
 
     @GetMapping("/api/{id}")
     @ResponseBody
-    public VacunaCatalogo apiBuscar(@PathVariable String id) {
-        return vacunaService.buscarCatalogoPorId(id);
+    public ResponseEntity<VacunaCatalogo> apiBuscar(@PathVariable String id) {
+        VacunaCatalogo vacuna = vacunaService.buscarCatalogoPorId(id);
+
+        if (vacuna != null) {
+            return ResponseEntity.ok(vacuna);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

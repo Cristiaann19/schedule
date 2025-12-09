@@ -48,87 +48,94 @@ public class DataLoader {
 
                                 // CLIENTES
                                 List<Cliente> clientes = new ArrayList<>(Arrays.asList(
-                                                admin,
+                                                admin, // 0
                                                 crearCliente("Jesus", "Huaman Cruz", "73381567", "cristian@gmail.com",
-                                                                "987654321", "Reque", "CLIENTE"),
+                                                                "987654321", "Reque", "CLIENTE"), // 1
                                                 crearCliente("Juan", "Perez Rodriguez", "12345678", "juan@gmail.com",
-                                                                "999888777", "Av. Balta 123", "CLIENTE"),
+                                                                "999888777", "Av. Balta 123", "CLIENTE"), // 2
                                                 crearCliente("Maria", "Gomez Sanchez", "87654321", "maria@gmail.com",
-                                                                "987654321", "Calle Real 456", "CLIENTE"),
+                                                                "987654321", "Calle Real 456", "CLIENTE"), // 3
                                                 crearCliente("Esmeralda", "Vasquez Carrasco", "11223344",
                                                                 "emmy@gmail.com", "951753852", "Las Delicias",
-                                                                "CLIENTE"),
+                                                                "CLIENTE"), // 4 (ESMERALDA)
                                                 crearCliente("Carlos", "Lopez Torres", "45678912",
                                                                 "carlos.lopez@email.com", "963852741",
-                                                                "Urb. Santa Victoria", "CLIENTE"),
+                                                                "Urb. Santa Victoria", "CLIENTE"), // 5
                                                 crearCliente("Ana", "Martinez Ruiz", "78912345",
                                                                 "ana.martinez@email.com", "951357456",
-                                                                "Calle Los Pinos", "CLIENTE"),
+                                                                "Calle Los Pinos", "CLIENTE"), // 6
                                                 crearCliente("Pedro", "Castillo Flores", "15975346",
                                                                 "pedro.castillo@email.com", "987123654",
-                                                                "Av. Salaverry", "CLIENTE"),
+                                                                "Av. Salaverry", "CLIENTE"), // 7
                                                 crearCliente("Lucia", "Fernandez Diaz", "35715948",
                                                                 "lucia.fer@email.com", "925846317", "Urb. La Primavera",
-                                                                "CLIENTE"),
+                                                                "CLIENTE"), // 8
                                                 crearCliente("Miguel", "Torres Vega", "85245619",
                                                                 "miguel.torres@email.com", "914725836",
-                                                                "Calle San Jose", "CLIENTE"),
+                                                                "Calle San Jose", "CLIENTE"), // 9
                                                 crearCliente("Sofia", "Ramirez Soto", "96325874",
                                                                 "sofia.ramirez@email.com", "936547821", "Av. Grau",
-                                                                "CLIENTE"),
+                                                                "CLIENTE"), // 10
                                                 // NUEVOS CLIENTES
                                                 crearCliente("Laura", "Salazar Mejia", "41526378",
                                                                 "laura.salazar@email.com", "988777666", "Pimentel",
-                                                                "CLIENTE"),
+                                                                "CLIENTE"), // 11
                                                 crearCliente("Diego", "Alvarado Quispe", "74185296",
                                                                 "diego.alv@email.com", "977444111", "La Victoria",
-                                                                "CLIENTE"),
+                                                                "CLIENTE"), // 12
                                                 crearCliente("Carmen", "Rosa Vilela", "36925814",
                                                                 "carmen.rosa@email.com", "966333222", "Mochumí",
-                                                                "CLIENTE"),
+                                                                "CLIENTE"), // 13
                                                 crearCliente("Fernando", "Cisneros Paz", "15935748",
                                                                 "fer.cisneros@email.com", "955222888",
-                                                                "Lambayeque Centro", "CLIENTE"),
+                                                                "Lambayeque Centro", "CLIENTE"), // 14
                                                 crearCliente("Patricia", "Urbina Santos", "25845639",
                                                                 "patty.urbina@email.com", "944111777", "Monsefú",
-                                                                "CLIENTE")));
+                                                                "CLIENTE"))); // 15
                                 clienteRepository.saveAll(clientes);
 
                                 // --- 2. CARGAR MASCOTAS ---
                                 List<Mascota> mascotas = Arrays.asList(
                                                 crearMascota("Firulais", "Perro", "Mestizo", "Macho", 5,
-                                                                "Muy juguetón.", clientes.get(2)),
+                                                                "Muy juguetón.", clientes.get(2)), // 0
                                                 crearMascota("Luna", "Perro", "Golden Retriever", "Hembra", 2,
-                                                                "Alérgica al pollo.", clientes.get(2)),
+                                                                "Alérgica al pollo.",
+                                                                clientes.get(2)), // 1
                                                 crearMascota("Michi", "Gato", "Siamés", "Macho", 3,
-                                                                "No le gustan los extraños.", clientes.get(3)),
+                                                                "No le gustan los extraños.",
+                                                                clientes.get(3)), // 2
                                                 crearMascota("Peluche", "Perro", "Shih Tzu", "Macho", 3,
-                                                                "Se parece a un peluche.", clientes.get(4)),
+                                                                "Se parece a un peluche.",
+                                                                clientes.get(4)), // 3 (De ESMERALDA)
                                                 crearMascota("Harry", "Perro", "Persa", "Macho", 4,
-                                                                "Requiere cepillado diario.", clientes.get(4)),
+                                                                "Requiere cepillado diario.",
+                                                                clientes.get(4)), // 4 (De ESMERALDA)
                                                 crearMascota("Rex", "Perro", "Pastor Alemán", "Macho", 6,
-                                                                "Guardían de casa.", clientes.get(5)),
+                                                                "Guardían de casa.", clientes.get(5)), // 5
                                                 crearMascota("Nala", "Gato", "Angora", "Hembra", 2, "Muy cariñosa.",
-                                                                clientes.get(6)),
+                                                                clientes.get(6)), // 6
                                                 crearMascota("Thor", "Perro", "Bulldog", "Macho", 1, "Ronca mucho.",
-                                                                clientes.get(7)),
+                                                                clientes.get(7)), // 7
                                                 crearMascota("Coco", "Ave", "Loro", "Macho", 10, "Habla mucho.",
-                                                                clientes.get(8)),
+                                                                clientes.get(8)), // 8
                                                 crearMascota("Simba", "Gato", "Común Europeo", "Macho", 5, "Cazador.",
-                                                                clientes.get(9)),
+                                                                clientes.get(9)), // 9
                                                 crearMascota("Rocky", "Perro", "Boxer", "Macho", 3, "Mucha energía.",
-                                                                clientes.get(10)),
+                                                                clientes.get(10)), // 10
                                                 // NUEVAS MASCOTAS
                                                 crearMascota("Tambor", "Otro", "Conejo Cabeza de León", "Macho", 1,
-                                                                "Come mucha zanahoria.", clientes.get(11)),
+                                                                "Come mucha zanahoria.",
+                                                                clientes.get(11)), // 11
                                                 crearMascota("Bruno", "Perro", "Bulldog Francés", "Macho", 4,
-                                                                "Problemas respiratorios leves.", clientes.get(12)),
+                                                                "Problemas respiratorios leves.",
+                                                                clientes.get(12)), // 12
                                                 crearMascota("Princesa", "Gato", "Persa", "Hembra", 3, "Muy delicada.",
-                                                                clientes.get(13)),
+                                                                clientes.get(13)), // 13
                                                 crearMascota("Max", "Perro", "Labrador", "Macho", 7,
-                                                                "Sufre de artrosis.", clientes.get(14)),
+                                                                "Sufre de artrosis.", clientes.get(14)), // 14
                                                 crearMascota("Bolita", "Otro", "Hámster", "Hembra", 1,
-                                                                "Duerme todo el día.", clientes.get(15)));
+                                                                "Duerme todo el día.", clientes.get(15)) // 15
+                                );
                                 mascotaRepository.saveAll(mascotas);
                                 System.out.println("✅ Clientes y Mascotas cargados.");
                         }
@@ -137,33 +144,39 @@ public class DataLoader {
                         if (trabajadorRepository.count() == 0) {
                                 List<Trabajador> trabajadores = Arrays.asList(
                                                 crearTrabajador("40251478", "Carlos Alberto", "Mendoza Paredes",
-                                                                "carlos.vet@huellitas.com", "987654321", "Veterinario",
-                                                                "Lun-Vie 8am-4pm", "ACTIVO"),
+                                                                "carlos.vet@huellitas.com",
+                                                                "987654321", "Veterinario", "Lun-Vie 8am-4pm",
+                                                                "ACTIVO"), // 0
                                                 crearTrabajador("72145896", "Maria Fernanda", "Lopez Torres",
-                                                                "maria.asist@huellitas.com", "951753852", "Asistente",
-                                                                "Lun-Sab 9am-6pm", "ACTIVO"),
+                                                                "maria.asist@huellitas.com",
+                                                                "951753852", "Asistente", "Lun-Sab 9am-6pm", "ACTIVO"), // 1
                                                 crearTrabajador("10254789", "Jorge Luis", "Perez Gomez",
-                                                                "jorge.grooming@huellitas.com", "963852741",
-                                                                "Estilista", "Mar-Dom 10am-7pm", "ACTIVO"),
+                                                                "jorge.grooming@huellitas.com",
+                                                                "963852741", "Estilista", "Mar-Dom 10am-7pm", "ACTIVO"), // 2
                                                 crearTrabajador("08963214", "Elena Sofia", "Diaz Medina",
-                                                                "elena.cirugia@huellitas.com", "999111222", "Cirujano",
-                                                                "Previa Cita", "VACACIONES"),
+                                                                "elena.cirugia@huellitas.com",
+                                                                "999111222", "Cirujano", "Previa Cita", "VACACIONES"), // 3
                                                 crearTrabajador("45632178", "Ana Paula", "Ruiz Silva",
-                                                                "ana.recepcion@huellitas.com", "922333444",
-                                                                "Recepcionista", "Lun-Vie 8am-5pm", "ACTIVO"),
+                                                                "ana.recepcion@huellitas.com",
+                                                                "922333444", "Recepcionista", "Lun-Vie 8am-5pm",
+                                                                "ACTIVO"), // 4
                                                 crearTrabajador("78965412", "Roberto", "Gomez Bolaños",
-                                                                "roberto.vet@huellitas.com", "988777666", "Veterinario",
-                                                                "Turno Noche", "INACTIVO"),
+                                                                "roberto.vet@huellitas.com",
+                                                                "988777666", "Veterinario", "Turno Noche", "INACTIVO"), // 5
                                                 // NUEVOS TRABAJADORES
                                                 crearTrabajador("41256398", "Sofia", "Vergara Rios",
-                                                                "sofia.derma@huellitas.com", "911222333", "Veterinario",
-                                                                "Lun-Mie-Vie 2pm-8pm", "ACTIVO"), // Especialista piel
+                                                                "sofia.derma@huellitas.com", "911222333",
+                                                                "Veterinario", "Lun-Mie-Vie 2pm-8pm", "ACTIVO"), // 6
+                                                                                                                 // (Sofia
+                                                                                                                 // -
+                                                                                                                 // Vet)
                                                 crearTrabajador("14785236", "Javier", "Soto Mayor",
-                                                                "javier.asist@huellitas.com", "988555222", "Asistente",
-                                                                "Mar-Jue-Sab 8am-8pm", "ACTIVO"),
+                                                                "javier.asist@huellitas.com", "988555222",
+                                                                "Asistente", "Mar-Jue-Sab 8am-8pm", "ACTIVO"), // 7
                                                 crearTrabajador("96325874", "Lucia", "Campos Elias",
-                                                                "lucia.grooming@huellitas.com", "977444111",
-                                                                "Estilista", "Fines de Semana", "ACTIVO"));
+                                                                "lucia.grooming@huellitas.com",
+                                                                "977444111", "Estilista", "Fines de Semana", "ACTIVO") // 8
+                                );
                                 trabajadorRepository.saveAll(trabajadores);
                                 System.out.println("✅ Trabajadores cargados.");
                         }
@@ -227,40 +240,45 @@ public class DataLoader {
                         if (servicioRepository.count() == 0) {
                                 List<Servicio> servicios = Arrays.asList(
                                                 crearServicio("Consulta General", "Chequeo completo de salud.",
-                                                                "stethoscope", "from-emerald-500", "to-teal-500",
-                                                                50.00),
+                                                                "stethoscope",
+                                                                "from-emerald-500", "to-teal-500", 50.00), // 0
                                                 crearServicio("Vacunación", "Aplicación de vacunas anuales.",
-                                                                "vaccines", "from-blue-500", "to-cyan-500", 45.00),
+                                                                "vaccines", "from-blue-500",
+                                                                "to-cyan-500", 45.00), // 1
                                                 crearServicio("Profilaxis Dental", "Limpieza profunda con ultrasonido.",
-                                                                "dentistry", "from-purple-500", "to-pink-500", 120.00),
+                                                                "dentistry",
+                                                                "from-purple-500", "to-pink-500", 120.00), // 2
                                                 crearServicio("Cirugía Esterilización",
                                                                 "Castración y Ovariohisterectomía.", "medical_services",
-                                                                "from-orange-500", "to-red-500", 250.00),
+                                                                "from-orange-500", "to-red-500", 250.00), // 3
                                                 // NUEVOS SERVICIOS
                                                 crearServicio("Baño y Corte (Grooming)",
                                                                 "Corte de raza, baño medicado.", "content_cut",
-                                                                "from-yellow-400", "to-orange-400", 60.00),
+                                                                "from-yellow-400", "to-orange-400", 60.00), // 4
                                                 crearServicio("Ecografía Abdominal", "Imágenes de diagnóstico.",
-                                                                "radiology", "from-indigo-500", "to-blue-600", 100.00),
+                                                                "radiology", "from-indigo-500",
+                                                                "to-blue-600", 100.00), // 5
                                                 crearServicio("Rayos X", "Placas radiográficas digitales.", "skeleton",
-                                                                "from-gray-600", "to-gray-800", 80.00),
+                                                                "from-gray-600",
+                                                                "to-gray-800", 80.00), // 6
                                                 crearServicio("Análisis de Sangre", "Hemograma y Bioquímica.",
-                                                                "science", "from-red-400", "to-red-600", 70.00),
+                                                                "science", "from-red-400",
+                                                                "to-red-600", 70.00), // 7
                                                 crearServicio("Hospedaje Diario", "Cuidado por día incluye paseos.",
-                                                                "home", "from-green-400", "to-emerald-600", 40.00));
+                                                                "home", "from-green-400",
+                                                                "to-emerald-600", 40.00)); // 8
                                 servicioRepository.saveAll(servicios);
                                 System.out.println("✅ Servicios MongoDB cargados.");
                         }
 
-                        // --- 6. CARGAR CITAS ---
+                        // --- 6. CARGAR CITAS (ACTUALIZADO) ---
                         if (citaRepository.count() == 0 && mascotaRepository.count() > 0
                                         && servicioRepository.count() > 0) {
                                 List<Mascota> m = mascotaRepository.findAll();
-                                List<Trabajador> t = trabajadorRepository.findAll(); // t0=Carlos, t1=Maria, t2=Jorge...
-                                                                                     // t6=Sofia
+                                List<Trabajador> t = trabajadorRepository.findAll();
                                 List<Servicio> s = servicioRepository.findAll();
 
-                                List<Cita> citas = Arrays.asList(
+                                List<Cita> citas = new ArrayList<>(Arrays.asList(
                                                 // Citas Pasadas
                                                 crearCita(m.get(0), t.get(0), s.get(0),
                                                                 LocalDateTime.now().minusDays(5).withHour(10),
@@ -270,8 +288,7 @@ public class DataLoader {
                                                                 "Limpieza dental", "REALIZADA"),
                                                 crearCita(m.get(5), t.get(6), s.get(0),
                                                                 LocalDateTime.now().minusDays(1).withHour(11),
-                                                                "Alergia en piel", "REALIZADA"), // Con Sofia
-                                                                                                 // (Dermatologa)
+                                                                "Alergia en piel", "REALIZADA"),
 
                                                 // Citas Hoy
                                                 crearCita(m.get(1), t.get(0), s.get(1),
@@ -279,7 +296,7 @@ public class DataLoader {
                                                                 "Vacuna anual", "PENDIENTE"),
                                                 crearCita(m.get(3), t.get(2), s.get(4),
                                                                 LocalDateTime.now().withHour(11).withMinute(30),
-                                                                "Corte de verano", "CONFIRMADA"), // Grooming
+                                                                "Corte de verano", "CONFIRMADA"),
                                                 crearCita(m.get(12), t.get(0), s.get(0),
                                                                 LocalDateTime.now().withHour(15).withMinute(0),
                                                                 "Dificultad respirar", "PENDIENTE"),
@@ -293,9 +310,25 @@ public class DataLoader {
                                                                 "Esterilización programada", "CONFIRMADA"),
                                                 crearCita(m.get(11), t.get(0), s.get(0),
                                                                 LocalDateTime.now().plusDays(3).withHour(17),
-                                                                "Revisión dientes conejo", "PENDIENTE"));
+                                                                "Revisión dientes conejo", "PENDIENTE")));
+
+                                // --- NUEVAS CITAS PARA ESMERALDA (MAÑANA) ---
+                                // Esmeralda es cliente index 4. Sus mascotas son:
+                                // m.get(3) -> Peluche (Shih Tzu)
+                                // m.get(4) -> Harry (Persa)
+
+                                // Cita 1: Peluche - Mañana 2:15 PM (14:15) - Consulta General
+                                citas.add(crearCita(m.get(3), t.get(0), s.get(0),
+                                                LocalDateTime.now().plusDays(1).withHour(14).withMinute(15),
+                                                "Revisión solicitada por dueña", "CONFIRMADA"));
+
+                                // Cita 2: Harry - Mañana 2:30 PM (14:30) - Vacunación
+                                citas.add(crearCita(m.get(4), t.get(0), s.get(1),
+                                                LocalDateTime.now().plusDays(1).withHour(14).withMinute(30),
+                                                "Vacuna anual pendiente", "CONFIRMADA"));
+
                                 citaRepository.saveAll(citas);
-                                System.out.println("✅ Citas cargadas.");
+                                System.out.println("✅ Citas cargadas (Incluyendo las de Esmeralda).");
                         }
 
                         // --- 7. CARGAR VENTAS (PAGOS) ---
@@ -310,15 +343,18 @@ public class DataLoader {
 
                                 // Venta 2: Maria compra Snacks (Pendiente)
                                 crearVenta(ventaRepository, c.get(3), "PLIN", "987654", "POR_VALIDAR",
-                                                Arrays.asList(p.get(7)), Arrays.asList(5));
+                                                Arrays.asList(p.get(7)),
+                                                Arrays.asList(5));
 
                                 // Venta 3: Esmeralda compra Bravecto
                                 crearVenta(ventaRepository, c.get(4), "TRANSFERENCIA", "BCP-555", "COMPLETADA",
-                                                Arrays.asList(p.get(8)), Arrays.asList(1));
+                                                Arrays.asList(p.get(8)),
+                                                Arrays.asList(1));
 
                                 // Venta 4: Laura compra Heno/Arena (simulado)
                                 crearVenta(ventaRepository, c.get(11), "EFECTIVO", "Caja-001", "COMPLETADA",
-                                                Arrays.asList(p.get(12)), Arrays.asList(2));
+                                                Arrays.asList(p.get(12)),
+                                                Arrays.asList(2));
 
                                 // Venta 5: Diego compra Hills
                                 crearVenta(ventaRepository, c.get(12), "YAPE", "778899", "COMPLETADA",
@@ -328,7 +364,8 @@ public class DataLoader {
 
                                 // Venta 6: Patricia compra un Rascador Torre
                                 crearVenta(ventaRepository, c.get(15), "TARJETA", "STRIPE-001", "COMPLETADA",
-                                                Arrays.asList(p.get(13)), Arrays.asList(1));
+                                                Arrays.asList(p.get(13)),
+                                                Arrays.asList(1));
 
                                 // Venta 7: Fernando compra Cama Ortopédica y Suplementos
                                 crearVenta(ventaRepository, c.get(14), "TRANSFERENCIA", "BBVA-123", "COMPLETADA",
@@ -340,11 +377,13 @@ public class DataLoader {
 
                                 // Venta 9: Sofia compra Collar Reflectivo (Pendiente)
                                 crearVenta(ventaRepository, c.get(10), "YAPE", "456123", "POR_VALIDAR",
-                                                Arrays.asList(p.get(6)), Arrays.asList(1));
+                                                Arrays.asList(p.get(6)),
+                                                Arrays.asList(1));
 
                                 // Venta 10: Miguel compra Alimento Premium
                                 crearVenta(ventaRepository, c.get(9), "PLIN", "321654", "COMPLETADA",
-                                                Arrays.asList(p.get(1)), Arrays.asList(2));
+                                                Arrays.asList(p.get(1)),
+                                                Arrays.asList(2));
 
                                 System.out.println("✅ Ventas cargadas (10 registros).");
                         }
@@ -391,7 +430,8 @@ public class DataLoader {
                                                                 "Ambos", "Baja"),
                                                 crearEnfermedad("Leucemia Felina",
                                                                 "Enfermedad viral que afecta el sistema inmune.",
-                                                                "Gato", "Alta"),
+                                                                "Gato",
+                                                                "Alta"),
                                                 // NUEVAS
                                                 crearEnfermedad("Ehrlichia (Garrapata)",
                                                                 "Infección bacteriana transmitida por garrapatas, causa anemia.",
@@ -403,7 +443,8 @@ public class DataLoader {
                                                                 "Fallo en la función de los riñones.", "Gato", "Alta"),
                                                 crearEnfermedad("Rabia",
                                                                 "Virus mortal que afecta el sistema nervioso central.",
-                                                                "Ambos", "Alta")));
+                                                                "Ambos",
+                                                                "Alta")));
                         }
 
                         // --- 10. CARGAR VACUNAS (Mongo) ---
@@ -416,9 +457,11 @@ public class DataLoader {
                                                                 "Distemper, Adenovirus, Parvovirus, Parainfluenza", 2,
                                                                 1, 55.00),
                                                 crearVacunaCat("Recombitek C6 (Séptuple)", "Boehringer Ingelheim",
-                                                                "Quíntuple + Lepto", 3, 1, 65.00),
+                                                                "Quíntuple + Lepto", 3, 1,
+                                                                65.00),
                                                 crearVacunaCat("Bronchi-Shield (KC)", "Zoetis",
-                                                                "Tos de las Perreras (Bordetella)", 3, 1, 40.00),
+                                                                "Tos de las Perreras (Bordetella)", 3, 1,
+                                                                40.00),
                                                 crearVacunaCat("GiardiaVax", "Zoetis", "Giardia Lamblia", 4, 2, 50.00),
 
                                                 // GATOS
@@ -427,7 +470,8 @@ public class DataLoader {
                                                                 45.00),
                                                 crearVacunaCat("Leucogen", "Virbac", "Leucemia Felina", 3, 1, 60.00),
                                                 crearVacunaCat("Nobivac Tricat Trio", "MSD",
-                                                                "Calicivirus, Herpesvirus, Panleucopenia", 2, 1, 50.00),
+                                                                "Calicivirus, Herpesvirus, Panleucopenia", 2, 1,
+                                                                50.00),
 
                                                 // AMBOS
                                                 crearVacunaCat("Rabisin", "Boehringer Ingelheim", "Rabia", 4, 1,
