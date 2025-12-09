@@ -8,6 +8,7 @@ import com.example.schedule.Repository.Mongo.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -81,4 +82,5 @@ public class VentaService {
     public Venta obtenerPorId(Long id) {
         return ventaRepository.findById(id).orElse(null);
     }
+
 }

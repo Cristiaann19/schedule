@@ -15,7 +15,6 @@ public class ConfiguracionService {
 
     public ConfiguracionWeb obtenerConfiguracion() {
         return configRepo.findById("config_principal").orElseGet(() -> {
-            // Crear configuración por defecto si no existe
             ConfiguracionWeb nueva = new ConfiguracionWeb();
             nueva.setId("config_principal");
             nueva.setUrlLogo("/images/logo-huellitas.png");

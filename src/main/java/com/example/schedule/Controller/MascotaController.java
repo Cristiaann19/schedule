@@ -25,7 +25,7 @@ public class MascotaController {
     }
 
     @PostMapping("/api/guardar")
-    @ResponseBody // Dice: "Devuelve datos (JSON), no una vista HTML"
+    @ResponseBody
     public ResponseEntity<?> guardarMascotaAjax(Mascota mascota) {
         try {
             Mascota nueva = mascotaService.guardarMascota(mascota);

@@ -37,13 +37,9 @@ public class HistorialService {
         }
         historial.setCitaId(citaId);
 
-        // LÓGICA ANTI-DUPLICADOS:
-        // Buscamos si ya existe una ficha para esta cita
         List<HistorialClinico> existentes = historialRepository.findByCitaId(citaId);
 
         if (!existentes.isEmpty()) {
-            // Si ya existe, tomamos la primera y sobreescribimos su ID
-            // Esto hace que Mongo haga un UPDATE en vez de un INSERT
             HistorialClinico anterior = existentes.get(0);
             historial.setId(anterior.getId());
         }

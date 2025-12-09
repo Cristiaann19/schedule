@@ -23,11 +23,7 @@ public class HistorialController {
     @PostMapping("/guardar")
     public String guardarHistorial(HistorialClinico historial, @RequestParam Long citaId) {
         try {
-            // Aseguramos que el objeto Historial tenga el ID de la cita (VITAL PARA EL
-            // COBRO)
             historial.setCitaId(citaId);
-
-            // Llamamos al servicio (que ya tiene la lógica de guardar en Mongo)
             historialService.guardarHistorial(historial, citaId);
 
             return "redirect:/admin/dashboard?success=Consulta+registrada+correctamente";

@@ -1,12 +1,9 @@
 const formProd = document.getElementById('productoForm');
 
-// 1. NUEVO PRODUCTO (Limpieza total)
 function nuevoProducto() {
     formProd.reset();
     document.getElementById('prodId').value = '';
     document.getElementById('modalTitleProd').innerText = "Nuevo Producto";
-
-    // Limpiar previsualización de imagen
     document.getElementById('prodImg').value = '';
     document.getElementById('previewContainer').classList.add('hidden');
     document.getElementById('imgPreview').src = '';
@@ -15,11 +12,9 @@ function nuevoProducto() {
     openModal('productoModal');
 }
 
-// 2. EDITAR PRODUCTO (Cargar datos + Imagen)
 function editarProducto(id) {
     document.getElementById('modalTitleProd').innerText = "Editar Producto";
 
-    // Feedback de carga
     if (typeof Toast !== 'undefined') Toast.info("Cargando datos...");
 
     fetch(`/admin/productos/api/${id}`)
@@ -28,23 +23,19 @@ function editarProducto(id) {
             return res.json();
         })
         .then(data => {
-            // Llenar campos de texto
             document.getElementById('prodId').value = data.id;
             document.getElementById('prodNombre').value = data.nombre;
             document.getElementById('prodDesc').value = data.descripcion;
             document.getElementById('prodPrecio').value = data.precio;
             document.getElementById('prodStock').value = data.stock;
 
-            // --- MANEJO DE LA IMAGEN ---
             const hiddenInput = document.getElementById('prodImg');
             const previewContainer = document.getElementById('previewContainer');
             const imgPreview = document.getElementById('imgPreview');
             const statusText = document.getElementById('uploadStatus');
 
-            // Guardar URL en el input oculto
             hiddenInput.value = data.imagenUrl || '';
 
-            // Mostrar previsualización si existe imagen
             if (data.imagenUrl) {
                 imgPreview.src = data.imagenUrl;
                 previewContainer.classList.remove('hidden');
@@ -63,14 +54,12 @@ function editarProducto(id) {
         });
 }
 
-// 3. VER HISTORIAL (Tu código, optimizado)
 function verHistorialProducto(id, nombre) {
     document.getElementById('historialProdNombre').innerText = nombre;
     const tbody = document.getElementById('tablaHistorialBody');
     const totalCant = document.getElementById('totalCantHistorial');
     const totalMonto = document.getElementById('totalMontoHistorial');
 
-    // Loader
     tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8"><span class="material-symbols-outlined animate-spin text-3xl text-primary">refresh</span></td></tr>';
 
     openModal('historialProductoModal');
@@ -81,7 +70,7 @@ function verHistorialProducto(id, nombre) {
             return res.json();
         })
         .then(data => {
-            tbody.innerHTML = ''; // Limpiar
+            tbody.innerHTML = '';
 
             if (data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-400">No hay ventas registradas para este producto.</td></tr>';

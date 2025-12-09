@@ -2,7 +2,10 @@ package com.example.schedule.Controller;
 
 import com.example.schedule.Model.ConfiguracionWeb;
 import com.example.schedule.Service.ConfiguracionService;
+import java.util.stream.Stream;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -12,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/web")
@@ -20,12 +26,10 @@ public class ConfiguracionController {
     @Autowired
     private ConfiguracionService configService;
 
-    // Directorio donde se guardarán las fotos (Dentro de tu proyecto)
     private static final String UPLOAD_DIR = "uploads/";
 
     @GetMapping("/gestionar")
     public String gestionarWeb(Model model) {
-        // Obtenemos la configuración actual para mostrarla en el HTML
         model.addAttribute("config", configService.obtenerConfiguracion());
         return "redirect:/admin/dashboard?success=Configuracion+actualizada";
     }
@@ -36,7 +40,6 @@ public class ConfiguracionController {
             if (!file.isEmpty()) {
                 String fileName = guardarArchivo(file);
 
-                // CAMBIO 2: La URL pública ahora empieza con /media/ (según el WebConfig)
                 String urlPublica = "/media/" + fileName;
 
                 configService.guardarLogo(urlPublica);
@@ -53,7 +56,6 @@ public class ConfiguracionController {
         try {
             if (!file.isEmpty()) {
                 String fileName = guardarArchivo(file);
-                // URL pública con /media/
                 String urlPublica = "/media/" + fileName;
                 configService.agregarImagenSlider(urlPublica);
             }
@@ -69,10 +71,8 @@ public class ConfiguracionController {
         return "redirect:/admin/web/gestionar?success=Imagen+eliminada";
     }
 
-    // --- MÉTODO GUARDAR ARCHIVO (MODIFICADO) ---
     private String guardarArchivo(MultipartFile file) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        // Agregamos un timestamp para evitar nombres duplicados
         String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
 
         Path uploadPath = Paths.get(UPLOAD_DIR);
@@ -86,5 +86,63 @@ public class ConfiguracionController {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         }
         return uniqueFileName;
+    }
+
+    @GetMapping("/api/imagenes")
+    @ResponseBody
+    public List<String> listarImagenesLocales() {
+        List<String> urls = new ArrayList<>();
+        try {
+            Path folderPath = Paths.get(UPLOAD_DIR);
+            if (Files.exists(folderPath)) {
+                // Aquí usamos java.util.stream.Stream
+                try (Stream<Path> paths = Files.walk(folderPath, 1)) {
+                    urls = paths
+                            .filter(Files::isRegularFile)
+                            .map(path -> "/media/" + path.getFileName().toString())
+                            .collect(Collectors.toList());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return urls;
+    }
+
+    // --- NUEVO 2: Seleccionar Logo existente ---
+    @PostMapping("/logo/seleccionar")
+    public String seleccionarLogoExistente(@RequestParam("url") String url) {
+        configService.guardarLogo(url);
+        return "redirect:/admin/dashboard?success=Logo+cambiado";
+    }
+
+    // --- NUEVO 3: Agregar imagen existente al Slider ---
+    @PostMapping("/slider/seleccionar")
+    public String seleccionarSliderExistente(@RequestParam("url") String url) {
+        configService.agregarImagenSlider(url);
+        return "redirect:/admin/dashboard?success=Imagen+agregada+al+slider";
+    }
+
+    @GetMapping("/api/imagenes/borrar")
+    @ResponseBody
+    public ResponseEntity<?> borrarImagenFisica(@RequestParam("url") String url) {
+        try {
+            // URL viene como "/media/foto.png", extraemos solo el nombre
+            String nombreArchivo = url.substring(url.lastIndexOf("/") + 1);
+            Path rutaArchivo = Paths.get(UPLOAD_DIR).resolve(nombreArchivo);
+
+            boolean borrado = Files.deleteIfExists(rutaArchivo);
+
+            if (borrado) {
+                // Opcional: También deberíamos quitarla del slider si se estaba usando
+                configService.eliminarImagenSlider(url);
+                return ResponseEntity.ok().body("{\"status\": \"ok\"}");
+            } else {
+                return ResponseEntity.badRequest()
+                        .body("{\"status\": \"error\", \"message\": \"Archivo no encontrado\"}");
+            }
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body("{\"status\": \"error\"}");
+        }
     }
 }

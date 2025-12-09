@@ -1,21 +1,16 @@
 function abrirReserva(idServicio, nombreServicio) {
-    // 1. LLENAR LOS INPUTS (Corrección Importante: Faltaba asignar el valor)
     const inputId = document.getElementById('reservaServicioId');
     const inputNombre = document.getElementById('reservaServicioNombre');
 
     if (inputId) inputId.value = idServicio;
     if (inputNombre) inputNombre.value = nombreServicio;
 
-    // 2. FILTRAR TRABAJADORES
     const selectVet = document.getElementById('reservaVeterinario');
 
-    // Limpiamos el select anterior
     selectVet.innerHTML = '<option value="">Cualquiera (Asignación Automática)</option>';
 
-    // Determinar especialidad requerida
     let especialidadRequerida = "Veterinario";
 
-    // CORRECCIÓN: Usamos la variable correcta 'nombreServicio'
     if (nombreServicio) {
         const nombreLower = nombreServicio.toLowerCase();
 
@@ -24,7 +19,6 @@ function abrirReserva(idServicio, nombreServicio) {
         }
     }
 
-    // Filtrar la lista global
     if (typeof listaTrabajadoresPublico !== 'undefined' && listaTrabajadoresPublico !== null && Array.isArray(listaTrabajadoresPublico)) {
 
         const candidatos = listaTrabajadoresPublico.filter(t =>
@@ -41,11 +35,9 @@ function abrirReserva(idServicio, nombreServicio) {
         console.warn("La lista de trabajadores no se cargó correctamente desde el servidor.");
     }
 
-    // 3. Mostrar Modal
     openModal('reservaModal');
 }
 
-// Funciones auxiliares (Estas estaban bien)
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -62,9 +54,7 @@ function closeModal(modalId) {
     }
 }
 
-// (Opcional) Si usas esto para productos
 function abrirCompra(id, nombre, precio) {
-    // Asegúrate que estos IDs existan en tu HTML si vas a usar esta función
     const inputId = document.getElementById('compraProductoId');
     if (inputId) inputId.value = id;
 

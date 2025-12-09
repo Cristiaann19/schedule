@@ -9,7 +9,6 @@ function mostrarSlide(index) {
     slides[index].classList.remove('opacity-0');
     slides[index].classList.add('opacity-100');
 
-    // Actualizar puntos
     dots.forEach(d => d.classList.remove('bg-white'));
     dots.forEach(d => d.classList.add('bg-white/50'));
     if (dots[index]) {
@@ -23,5 +22,4 @@ function siguienteSlide() {
     mostrarSlide(currentSlide);
 }
 
-// Cambio automático cada 4 segundos
-setInterval(siguienteSlide, 4000);
+setInterval(siguienteSlide, 3000);
