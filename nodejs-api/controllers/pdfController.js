@@ -172,8 +172,9 @@ const generarBoletaPDF = async (req, res) => {
 
         const pdfBuffer = await page.pdf({
             width: '80mm',
+            height: '120mm',
             printBackground: true,
-            margin: { top: '0px', bottom: '10px', left: '0px', right: '0px' }
+            margin: { top: '0px', bottom: '0px', left: '0px', right: '0px' }
         });
 
         await browser.close();
