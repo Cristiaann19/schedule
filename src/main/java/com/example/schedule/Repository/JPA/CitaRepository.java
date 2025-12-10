@@ -14,7 +14,7 @@ import java.util.List;
 public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findByVeterinarioAndFechaHora(Trabajador veterinario, LocalDateTime fechaHora);
 
-    List<Cita> findByMascota_Cliente_Id(Long clienteId);
+    List<Cita> findByMascotaClienteIdOrderByFechaHoraDesc(Long clienteId);
 
     long countByFechaHoraBetween(LocalDateTime inicio, LocalDateTime fin);
 
@@ -26,4 +26,6 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findByEstadoAndFechaHoraBefore(EstadoCita estado, LocalDateTime fechaActual);
 
     List<Cita> findByMascotaIdAndFechaHoraAndEstadoNot(Long mascotaId, LocalDateTime fechaHora, Cita.EstadoCita estado);
+
+    List<Cita> findAllByOrderByFechaHoraDesc();
 }

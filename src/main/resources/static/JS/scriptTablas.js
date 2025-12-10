@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('.datatable').DataTable({
         responsive: true,
+        order: [],
         language: {
             "decimal": "",
             "emptyTable": "No hay información",

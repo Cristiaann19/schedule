@@ -14,4 +14,6 @@ public interface VentaRepository extends JpaRepository<Venta, Long> {
 
     @Query("SELECT COALESCE(SUM(v.total), 0) FROM Venta v WHERE v.fecha BETWEEN :inicio AND :fin AND v.estado = 'COMPLETADA'")
     Double sumarVentasPorFecha(@Param("inicio") LocalDateTime inicio, @Param("fin") LocalDateTime fin);
+
+    List<Venta> findAllByOrderByFechaDesc();
 }

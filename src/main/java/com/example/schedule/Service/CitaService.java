@@ -46,12 +46,11 @@ public class CitaService {
     private HistorialRepository HistorialRepository;
 
     public List<Cita> listarCitas() {
-        return citaRepository.findAll();
+        return citaRepository.findAllByOrderByFechaHoraDesc();
     }
 
     public void guardarCita(Cita cita) {
 
-        // 1. Completar datos del Servicio
         if (cita.getServicioId() != null) {
             Servicio servicio = servicioService.obtenerPorId(cita.getServicioId());
             if (servicio != null) {
@@ -149,7 +148,7 @@ public class CitaService {
     }
 
     public List<Cita> listarPorCliente(Long clienteId) {
-        return citaRepository.findByMascota_Cliente_Id(clienteId);
+        return citaRepository.findByMascotaClienteIdOrderByFechaHoraDesc(clienteId);
     }
 
     public List<Cita> obtenerCitasDelDia() {
@@ -165,7 +164,7 @@ public class CitaService {
 
         for (Cita cita : citasViejas) {
             cita.setEstado(EstadoCita.CANCELADA);
-            cita.setMotivo(cita.getMotivo() + " [Cerrada autom.]"); // Opcional: Agregar nota
+            cita.setMotivo(cita.getMotivo() + " [Cerrada autom.]");
             citaRepository.save(cita);
             System.out.println("Cita actualizada automáticamente ID: " + cita.getId());
         }
@@ -193,7 +192,6 @@ public class CitaService {
         List<DetalleVenta> detalles = new ArrayList<>();
         double totalVenta = 0.0;
 
-        // 1. SERVICIO BASE
         Double precioServicio = (cita.getPrecioAcordado() != null) ? cita.getPrecioAcordado() : 0.0;
         DetalleVenta detServ = new DetalleVenta();
         detServ.setNombreProducto("Servicio: " + cita.getServicioNombre());
@@ -207,8 +205,6 @@ public class CitaService {
         detalles.add(detServ);
         totalVenta += precioServicio;
 
-        // 2. EXTRAS DEL HISTORIAL (Ahora soporta múltiples registros)
-        // Obtenemos la LISTA de fichas (pueden ser 1, 2 o más)
         List<HistorialClinico> fichas = HistorialRepository.findByCitaId(citaId);
 
         System.out.println("Fichas encontradas: " + fichas.size());
@@ -238,7 +234,6 @@ public class CitaService {
             }
         }
 
-        // 3. FINALIZAR
         venta.setDetalles(detalles);
         venta.setTotal(totalVenta);
 

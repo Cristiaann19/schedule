@@ -64,7 +64,7 @@ public class VentaService {
     }
 
     public List<Venta> listarTodas() {
-        return ventaRepository.findAll();
+        return ventaRepository.findAllByOrderByFechaDesc();
     }
 
     public void aprobarVenta(Long id) {
